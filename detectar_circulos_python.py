@@ -32,6 +32,7 @@ def detectar_circulos(images):
                 cv2.circle(img_circulos, (i[0], i[1]), i[2], (0, 255, 0), 2)
 
         images_circulos.append(img_circulos)
+        print(f'El dado tiene {len(circles[0])} circulos')
 
     return images_circulos
 
@@ -40,7 +41,8 @@ def load_images(filenames):
     return [imageio.imread(filename) for filename in filenames]
 
 filenames = [f'calibracion/img{i}.jpg' for i in range(1,24)]
-images = load_images(filenames)
+filenames_dados = [f'circs/imagen_{i}.jpg' for i in range(1,5)]
+images = load_images(filenames_dados)
 
 def show_circles(images):
     fig, ax = plt.subplots(4, 6, figsize=(15, 10))
