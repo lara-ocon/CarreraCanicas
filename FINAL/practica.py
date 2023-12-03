@@ -31,7 +31,7 @@ if __name__ == "__main__":
         # detectamos el patrón
         desbloqueado = detector.detectar_patron(patron, not_patron, picam)
     
-    # esperamos 3 segundos y pasamos a la siguiente fase
+    # esperamos 5 segundos y pasamos a la siguiente fase
     cv2.waitKey(5000)
 
     # 2) Dibujar el patron de la pantalla
