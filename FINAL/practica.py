@@ -1,0 +1,39 @@
+import detector 
+import cv2
+import calibration
+from picamera2 import Picamera2
+
+
+def iniciar_grabacion():
+    picam = Picamera2()
+    picam.video_configuration.main.size = (640, 480)
+    picam.preview_configuration.main.format = "RGB888"
+    picam.preview_configuration.align()
+    picam.configure("preview")
+    picam.start()
+
+    return picam
+
+
+if __name__ == "__main__":
+
+    print("Calibrando...")
+    calibration.calibrate()
+    print("Calibrado")
+
+    print("Pulsa para comenzar la detección de la secuencia")
+
+    picam = iniciar_grabacion()
+    patron, not_patron = detector.obtener_patrones()
+
+    desbloqueado = False
+
+    while not desbloqueado:
+        frame = picam.capture_array()
+        desbloqueado = detector.detectar_patron(frame, patron, not_patron)
+    
+    # esperamos 3 segundos y paramos la grabación
+    cv2.waitKey(3000)
+    picam.stop()
+    
+
