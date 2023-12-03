@@ -262,7 +262,7 @@ def tracker_objetos(picam):
         frame, prev_x_cuadrado, prev_y_cuadrado, x_cuadrado, y_cuadrado, w_cuadrado, h_cuadrado = tracker_cuadrado_amarillo(frame, prev_x_cuadrado, prev_y_cuadrado)
         frame, prev_x_triangulo, prev_y_triangulo, x_triangulo, y_triangulo, w_triangulo, h_triangulo = tracker_triangulo_azul(frame, prev_x_triangulo, prev_y_triangulo)
         frame, prev_x_estrella, prev_y_estrella, x_estrella, y_estrella, w_estrella, h_estrella = tracker_estrella_verde(frame, prev_x_estrella, prev_y_estrella)
-        frame, prev_x_circulo, prev_y_circulo, x_circulo, y_circulo, w_circulo, h_circulo = tracker_circulo_verde(frame, prev_x_circulo, prev_y_circulo)
+        frame, prev_x_circulo, prev_y_circulo, x_circulo, y_circulo, w_circulo, h_circulo = tracker_circulo_azul(frame, prev_x_circulo, prev_y_circulo)
 
         # Dibujamos los objetos encontrados
         if x_cuadrado is not None and y_cuadrado is not None:
