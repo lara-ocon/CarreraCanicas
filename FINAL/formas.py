@@ -197,15 +197,25 @@ def is_green(frame, x, y):
     # Convertir el frame de BGR a HSV
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-    # color en HSV (verde)
-    lower_color = LOWER_COLOR_GREEN
-    upper_color = UPPER_COLOR_GREEN
+    # Definir rango de color verde en HSV
+    lower_color = np.array([40, 40, 40])  # Modifica estos valores según tu rango de verde
+    upper_color = np.array([70, 255, 255])  # Modifica estos valores según tu rango de verde
 
-    # Crear una máscara para el color que nos pasan y aplicarla al frame
+    # Crear una máscara para el color y aplicarla al frame
     mask = cv2.inRange(hsv, lower_color, upper_color)
 
-    # comprobamos si el pixel del centro del circulo es verde
-    return mask[y, x] == 255
+    # Convertir las coordenadas a enteros
+    x = int(x)
+    y = int(y)
+
+    # Asegurarse de que las coordenadas estén dentro de los límites de la máscara
+    if 0 <= y < mask.shape[0] and 0 <= x < mask.shape[1]:
+        # Comprobar si el píxel en la máscara es verde
+        return mask[y, x] == 255
+    else:
+        return False
+
+
 
 
 def dibujar_forma(tipo, x, y, w, h, frame):
