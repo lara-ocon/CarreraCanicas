@@ -139,7 +139,7 @@ def tracker_circulo_verde(frame, prev_x, prev_y, trajectory, is_tracking):
     # Encontrar contornos en la máscara
     contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-    x, y, radius = None, None, None
+    x, y, radius = None, None, 0
 
     # Si se detecta algún contorno comprobamos que sea un círculo
     if contours:
@@ -153,9 +153,10 @@ def tracker_circulo_verde(frame, prev_x, prev_y, trajectory, is_tracking):
                 circularity = 0
 
             if circularity > 0.85:  # Ajusta este umbral según tu definición de casi perfecto
-                ((x, y), radius) = cv2.minEnclosingCircle(contour)
+                ((x, y), radius_new) = cv2.minEnclosingCircle(contour)
 
-                if radius > 30:
+                if radius_new > 30 and radius_new > radius:
+                    radius = radius_new
                     print('He detectado un circulo')
                     # Convertir las coordenadas a números enteros
                     x, y, radius = int(x), int(y), int(radius)
@@ -170,9 +171,9 @@ def tracker_circulo_verde(frame, prev_x, prev_y, trajectory, is_tracking):
                     prev_x, prev_y = x, y
 
                     break # termina el bucle si encuentra un buen circulo
-
-                else:
-                    radius = None
+    
+    if radius == 0:
+        radius = None
 
     return frame, prev_x, prev_y, trajectory, x, y, radius
 
