@@ -153,11 +153,11 @@ def tracker_circulo_verde(frame, prev_x, prev_y, trajectory, is_tracking):
                 circularity = 0
             
             print(circularity)
-            
+
             if circularity > 0.85:  # Ajusta este umbral según tu definición de casi perfecto
                 ((x, y), radius) = cv2.minEnclosingCircle(contour)
 
-                if radius > 50:
+                if radius > 30:
                     print('He detectado un circulo')
                     # Convertir las coordenadas a números enteros
                     x, y, radius = int(x), int(y), int(radius)
