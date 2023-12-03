@@ -106,15 +106,29 @@ def overlay_disney_logo(frame):
     return frame
 
 
+# Agregar esta función para comparar la trayectoria con el logo
 def compare_trajectory_with_logo(trajectory, logo):
     # Obtener las dimensiones del logo
     logo_h, logo_w = logo.shape[:2]
 
-    # Crear un array con la trayectoria como un array NumPy
-    trajectory_np = np.array(trajectory)
+    # Si la trayectoria está vacía o tiene menos de 2 puntos, regresar 0 de similitud
+    if len(trajectory) < 2:
+        print("La trayectoria es demasiado corta para comparar con el logo.")
+        return 0
 
-    # Escalar la trayectoria para que coincida con el tamaño del logo
-    scaled_trajectory = cv2.resize(trajectory_np, (logo_w, logo_h))
+    # Extraer los puntos X e Y de la trayectoria
+    trajectory_x, trajectory_y = zip(*trajectory)
+
+    # Encontrar los rangos de X e Y para escalar la trayectoria
+    min_x, max_x = min(trajectory_x), max(trajectory_x)
+    min_y, max_y = min(trajectory_y), max(trajectory_y)
+
+    # Calcular el ancho y alto de la trayectoria
+    trajectory_width = max_x - min_x
+    trajectory_height = max_y - min_y
+
+    # Redimensionar la trayectoria para que coincida con el tamaño del logo
+    scaled_trajectory = cv2.resize(trajectory, (logo_w, logo_h), interpolation=cv2.INTER_LINEAR)
 
     # Convertir la trayectoria escalada y el logo a escala de grises
     scaled_trajectory_gray = cv2.cvtColor(scaled_trajectory, cv2.COLOR_BGR2GRAY)
@@ -125,6 +139,7 @@ def compare_trajectory_with_logo(trajectory, logo):
     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
 
     return max_val
+
 
 def stream_video():
     picam = Picamera2()
