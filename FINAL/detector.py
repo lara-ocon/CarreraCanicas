@@ -9,7 +9,7 @@ def obtener_keypoints_and_descriptors(img):
  
  
 def obtener_patrones():
-    filenames_patrones = [f'numeros/imagen_{i}.jpg' for i in range(1,11)]
+    filenames_patrones = [f'numeros_detector/imagen_{i}.jpg' for i in range(1,11)]
     kp_descriptors = {i: [] for i in range(1,11)}
     for filename, i in zip(filenames_patrones, range(1,11)):
         img = cv2.imread(filename)
