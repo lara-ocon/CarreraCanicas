@@ -38,6 +38,8 @@ def detectar_patron(patron, not_patron, picam):
  
     next_pattern = 1
     current_pattern = 1
+
+    texto = ""
  
     while not salir:
         best_match = None
@@ -87,26 +89,31 @@ def detectar_patron(patron, not_patron, picam):
                             # DESBLOQUEADO
                             desbloqueado = True
                             salir = True
-                            frame = mostrar_texto(frame, "DESBLOQUEADO")
+                            texto = "DESBLOQUEADO"
                         else:
-                            frame = mostrar_texto(frame, "Patron")
+                            texto = f"Patron correcto"
+
                     elif best_match[1] == current_pattern:
                         # Seguimos en el mismo patron
-                        ...
+                        texto = f"Patron correcto"
                         # print('Seguimos en el patron que toca.')
                     else:
                         print('Patron detectado correctamente pero no es el que toca.')
+                        texto = f"Patron incorrecto"
                         desbloqueado = False
                         salir = True
 
                 elif best_match[0] == "not_patron":
                     print('Patron detectado pero no es de la secuencia.')
-                    frame = mostrar_texto(frame, "No patron")
+                    texto = f"Patron incorrecto"
                     salir = True
                 else:
                     print('No se ha detectado ningun patron')
+                    texto = f"Patron no detectado"
                     # frame = mostrar_texto(frame, "No se ha encontrado nada")
                     pass
+
+        frame = mostrar_texto(frame, texto)
  
         cv2.imshow("picam", frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
