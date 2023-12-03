@@ -108,7 +108,7 @@ def overlay_disney_logo(frame):
 
 def compare_shapes(trajectory, contour_logo):
 
-    similarity = 0
+    similarity = 1000
     # Calcular el contorno de la trayectoria actual
     if len(trajectory) > 10:  # Calcular el contorno solo si hay suficientes puntos en la trayectoria
         pts = np.array(trajectory[-10:], dtype=np.int32)  # Usar los últimos 10 puntos de la trayectoria
