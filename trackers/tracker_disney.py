@@ -30,8 +30,8 @@ def tracker(frame, prev_x, prev_y, trajectory, is_tracking):
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
     # color en HSV (azul)
-    lower_color = LOWER_COLOR_BLUE
-    upper_color = UPPER_COLOR_BLUE
+    lower_color = LOWER_COLOR_YELLOW
+    upper_color = UPPER_COLOR_YELLOW
 
     # Crear una máscara para el color que nos pasan y aplicarla al frame
     mask = cv2.inRange(hsv, lower_color, upper_color)
@@ -84,8 +84,11 @@ def overlay_disney_logo(frame):
     logo_mask_resized = cv2.resize(logo_mask, (400, 400))
 
     # Obtener las coordenadas donde se superpondrá el logo en la esquina inferior
+    # lo ponemos en la esquina inferior derecha (despues voltearemos el frame para que se vea en la izquierda)
     y1, y2 = frame.shape[0] - logo_resized.shape[0], frame.shape[0]  # Esquina inferior
-    x1, x2 = 0, logo_resized.shape[1]  # Esquina izquierda
+    # x1, x2 = 0, logo_resized.shape[1]  # Esquina izquierda
+    x1, x2 = frame.shape[1] - logo_resized.shape[1], frame.shape[1]  # Esquina derecha
+
 
     # Verificar que las coordenadas no excedan las dimensiones de la imagen en blanco
     if y2 - y1 <= frame.shape[0] and x2 - x1 <= frame.shape[1]:
@@ -121,7 +124,10 @@ def stream_video():
 
         # Dibujar la trayectoria en el frame
         frame_with_trajectory = draw_trajectory(frame_with_logo.copy(), trajectory)
-        cv2.imshow("picam", frame_with_trajectory)
+
+        # Mostrar el frame
+        frame_flipped = frame_with_trajectory[:, ::-1, :]  # Voltear el frame horizontalmente
+        cv2.imshow("picam", frame_flipped)
 
         # Detectar tecla pulsada
         key = cv2.waitKey(1)
