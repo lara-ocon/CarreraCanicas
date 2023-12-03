@@ -120,7 +120,7 @@ def tracker_triangulo_azul(frame, prev_x, prev_y, trajectory, is_tracking):
             # Actualizar las coordenadas previas
             prev_x, prev_y = x + w // 2, y + h // 2
 
-    return
+    return frame, prev_x, prev_y, trajectory
 
 
 def tracker_circulo_verde(frame, prev_x, prev_y, trajectory, is_tracking):
