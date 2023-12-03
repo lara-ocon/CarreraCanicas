@@ -153,72 +153,59 @@ def tracker_triangulo_azul(frame, prev_x, prev_y):
         return frame, prev_x, prev_y, x, y, w, h
 
 
-def tracker_circulo_verde(frame, prev_x, prev_y):
 
-    # pasamos a escala de grises
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+def tracker_circulo_azul(frame, prev_x, prev_y, trajectory, is_tracking):
 
-    # aplicamos un filtro gaussiano
-    blur = cv2.GaussianBlur(gray, (5, 5), 0)
-
-    # detectamos los circulos
-    circles = cv2.HoughCircles(blur, 
-                               cv2.HOUGH_GRADIENT, 
-                               dp = 1,
-                                minDist = 100,
-                                param1 = 50,
-                                param2 = 30,
-                                minRadius = 10,
-                                maxRadius = 100)
-    
-    # detectamos los colores dentro de cada circulo, cogiendo solo
-    # los circulos que tengan un color verde
-    x, y, w, h = None, None, None, None
-
-    if circles is not None:
-        max_radius = 0
-
-        circles = np.uint16(np.around(circles))
-
-        for circle in circles[0 , :]:
-            center_x, center_y, radius = circle[0], circle[1], circle[2]
-            # comprobamos que el color del centro del circulo sea verde
-            if is_green(frame, center_x, center_y):
-                if radius > max_radius:
-                    print('circulo')
-                    max_radius = radius
-                    x, y, w, h = center_x, center_y, radius, radius
-
-    # Actualizar las coordenadas previas
-    if x is not None and y is not None:
-        prev_x, prev_y = x + w//2, y + h//2
-
-    return frame, prev_x, prev_y, x, y, w, h
-
-
-def is_green(frame, x, y):
     # Convertir el frame de BGR a HSV
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-    # Definir rango de color verde en HSV
+    # color en HSV (rojo)
     lower_color = LOWER_COLOR_BLUE
     upper_color = UPPER_COLOR_BLUE
 
-    # Crear una máscara para el color y aplicarla al frame
+    # Crear una máscara para el color que nos pasan y aplicarla al frame
     mask = cv2.inRange(hsv, lower_color, upper_color)
 
-    # Convertir las coordenadas a enteros
-    x = int(x)
-    y = int(y)
+    # Encontrar contornos en la máscara
+    contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-    # Asegurarse de que las coordenadas estén dentro de los límites de la máscara
-    if 0 <= y < mask.shape[0] and 0 <= x < mask.shape[1]:
-        # Comprobar si el píxel en la máscara es verde
-        return mask[y, x] == 255
-    else:
-        return False
+    x, y, radius = None, None, 0
 
+    # Si se detecta algún contorno comprobamos que sea un círculo
+    if contours:
 
+        for contour in contours:
+            area = cv2.contourArea(contour)
+            perimeter = cv2.arcLength(contour, True)
+            if perimeter > 0:
+                circularity = 4 * np.pi * area / (perimeter * perimeter)
+            else:
+                circularity = 0
+
+            if circularity > 0.85:  # Ajusta este umbral según tu definición de casi perfecto
+                ((x, y), radius_new) = cv2.minEnclosingCircle(contour)
+
+                if radius_new > 30 and radius_new > radius:
+                    radius = radius_new
+                    print('He detectado un circulo')
+                    # Convertir las coordenadas a números enteros
+                    x, y, radius = int(x), int(y), int(radius)
+                    # Dibujar el círculo y su centro
+                    # cv2.circle(frame, (x, y), radius, (0, 255, 0), 2)
+                    # cv2.circle(frame, (x, y), 5, (0, 0, 255), -1)
+
+                    if is_tracking == True:
+                        trajectory.append((x, y))
+
+                    # Actualizar las coorden
+                    prev_x, prev_y = x, y
+
+                    break # termina el bucle si encuentra un buen circulo
+    
+    if radius == 0:
+        radius = None
+
+    return frame, prev_x, prev_y, trajectory, x, y, radius, radius
 
 
 def dibujar_forma(tipo, x, y, w, h, frame):
@@ -232,14 +219,6 @@ def dibujar_forma(tipo, x, y, w, h, frame):
     elif tipo == 'triangulo':
         # Dibujae un triangulo
         points = np.array([[x + w//2, y], [x, y + h], [x + w, y + h]])
-        cv2.drawContours(frame, [points], 0, (0, 0, 255), 2)
-
-        # pintamos un punto en el centro
-        cv2.circle(frame, (x + w//2, y + h//2), 5, (0, 0, 255), -1)
-
-    elif tipo == 'estrella':
-        # dibujar una estrella
-        points = np.array([[x + w//2, y], [x + w//3, y + h], [x + 2*w//3, y + h], [x, y + h//3], [x + w, y + h//3]])
         cv2.drawContours(frame, [points], 0, (0, 0, 255), 2)
 
         # pintamos un punto en el centro
