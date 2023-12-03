@@ -73,6 +73,9 @@ def overlay_disney_logo(frame):
     # Cargar la imagen del logo de Disney Channel con transparencia
     disney_logo = cv2.imread('disney-channel-logo.png', -1)  # Ruta de la imagen del logo
 
+    # giramos el logo horizontalmente(porque luego voltearemos el frame)
+    disney_logo = disney_logo[:, ::-1, :]
+
     # Extraer los canales R, G, B de la imagen del logo y el canal alfa
     logo_bgr = disney_logo[:, :, 0:3]
     logo_mask = disney_logo[:, :, 3]
