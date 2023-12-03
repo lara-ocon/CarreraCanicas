@@ -202,7 +202,7 @@ def tracker_circulo_azul(frame, prev_x, prev_y):
     if radius == 0:
         radius = None
 
-    return frame, prev_x, prev_y, trajectory, x, y, radius, radius
+    return frame, prev_x, prev_y, x, y, radius, radius
 
 
 def dibujar_forma(tipo, x, y, w, h, frame):
