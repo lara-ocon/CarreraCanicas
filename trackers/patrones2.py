@@ -218,12 +218,12 @@ def stream_video():
         # Realizar el seguimiento de de los objetos
         frame, prev_x1, prev_y1, trajectory1, x1, y1, w1, h1 = tracker_cuadrado_amarillo(frame, prev_x1, prev_y1, trajectory1, is_tracking)
         frame, prev_x2, prev_y2, trajectory2, x2, y2, w2, h2 = tracker_triangulo_azul(frame, prev_x2, prev_y2, trajectory2, is_tracking)
-        frame, prev_x3, prev_y3, trajectory3, x3, y3, w3, h3 = tracker_circulo_verde(frame, prev_x3, prev_y3, trajectory3, is_tracking)
+        frame, prev_x3, prev_y3, trajectory3, x3, y3, radius = tracker_circulo_verde(frame, prev_x3, prev_y3, trajectory3, is_tracking)
 
         # Dibubjamos los objetos
         frame = dibujar_objeto(frame, x1, y1, w1, h1, "cuadrado", prev_x1, prev_y1, trajectory1, is_tracking)
         frame = dibujar_objeto(frame, x2, y2, w2, h2, "triangulo", prev_x2, prev_y2, trajectory2, is_tracking)
-        frame = dibujar_objeto(frame, x3, y3, w3, h3, "circulo", prev_x3, prev_y3, trajectory3, is_tracking)
+        frame = dibujar_objeto(frame, x3, y3, radius, radius, "circulo", prev_x3, prev_y3, trajectory3, is_tracking)
 
         cv2.imshow("picam", frame)
 
