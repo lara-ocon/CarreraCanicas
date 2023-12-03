@@ -28,7 +28,7 @@ def mostrar_texto(frame, texto):
     return frame
  
  
-def detectar_patron_y_mostrar_texto(patron, not_patron, picam):
+def detectar_patron(patron, not_patron, picam):
     desbloqueado = False
     salir = False
  
@@ -123,7 +123,7 @@ if __name__ == "__main__":
     desbloqueado = False
     while not desbloqueado:
         frame = picam.capture_array()
-        desbloqueado = detectar_patron_y_mostrar_texto(patron, not_patron, picam)
+        desbloqueado = detectar_patron(patron, not_patron, picam)
  
     print('Desbloqueado')
     picam.stop()
