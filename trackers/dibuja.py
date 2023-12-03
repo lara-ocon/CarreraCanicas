@@ -84,7 +84,6 @@ def stream_video():
         frame, prev_x, prev_y, trajectory = tracker(frame, prev_x, prev_y, trajectory, is_tracking)
         draw_blue_circle(frame)
         frame_with_trajectory = draw_trajectory(frame.copy(), trajectory)
-        cv2.imshow("picam", frame_with_trajectory)
 
         key = cv2.waitKey(1)
         if key == ord('s'):
@@ -98,12 +97,15 @@ def stream_video():
                 prev_x = None
                 prev_y = None
             else:
-                text_video = "¡Ohhh vuelvelo a intentar!"
+                texto_video = "¡Ohhh vuelvelo a intentar!"
                 trajectory = []
         elif key == ord('q'):
             break
 
-        cv2.putText(frame_with_trajectory, texto_video, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+        frame_with_text = cv2.putText(frame_with_trajectory, texto_video, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+
+        cv2.imshow("picam", frame_with_text)
+        
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
