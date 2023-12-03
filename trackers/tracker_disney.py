@@ -107,6 +107,8 @@ def stream_video():
     picam.configure("preview")
     picam.start()
     is_tracking = False
+    prev_x, prev_y = None, None
+    trajectory = []
 
     while True:
         frame = picam.capture_array()
