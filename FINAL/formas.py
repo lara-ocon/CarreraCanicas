@@ -201,8 +201,8 @@ def is_green(frame, x, y):
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
     # Definir rango de color verde en HSV
-    lower_color = np.array([40, 40, 40])  # Modifica estos valores según tu rango de verde
-    upper_color = np.array([70, 255, 255])  # Modifica estos valores según tu rango de verde
+    lower_color = LOWER_COLOR_BLUE
+    upper_color = UPPER_COLOR_BLUE
 
     # Crear una máscara para el color y aplicarla al frame
     mask = cv2.inRange(hsv, lower_color, upper_color)
