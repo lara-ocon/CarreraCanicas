@@ -151,8 +151,6 @@ def tracker_circulo_verde(frame, prev_x, prev_y, trajectory, is_tracking):
                 circularity = 4 * np.pi * area / (perimeter * perimeter)
             else:
                 circularity = 0
-            
-            print(circularity)
 
             if circularity > 0.85:  # Ajusta este umbral según tu definición de casi perfecto
                 ((x, y), radius) = cv2.minEnclosingCircle(contour)
