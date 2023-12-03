@@ -130,8 +130,8 @@ def tracker_circulo_verde(frame, prev_x, prev_y, trajectory, is_tracking):
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
     # color en HSV (rojo)
-    lower_color = LOWER_COLOR_GREEN
-    upper_color = UPPER_COLOR_GREEN
+    lower_color = LOWER_COLOR_BLUE
+    upper_color = UPPER_COLOR_BLUE
 
     # Crear una máscara para el color que nos pasan y aplicarla al frame
     mask = cv2.inRange(hsv, lower_color, upper_color)
@@ -147,7 +147,10 @@ def tracker_circulo_verde(frame, prev_x, prev_y, trajectory, is_tracking):
         for contour in contours:
             area = cv2.contourArea(contour)
             perimeter = cv2.arcLength(contour, True)
-            circularity = 4 * np.pi * area / (perimeter * perimeter)
+            if perimeter > 0:
+                circularity = 4 * np.pi * area / (perimeter * perimeter)
+            else:
+                circularity = 0
 
             if circularity > 0.85:  # Ajusta este umbral según tu definición de casi perfecto
                 ((x, y), radius) = cv2.minEnclosingCircle(contour)
@@ -167,7 +170,7 @@ def tracker_circulo_verde(frame, prev_x, prev_y, trajectory, is_tracking):
                     prev_x, prev_y = x, y
 
                     break # termina el bucle si encuentra un buen circulo
-                
+
                 else:
                     radius = None
 
