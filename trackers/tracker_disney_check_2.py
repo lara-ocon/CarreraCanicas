@@ -117,6 +117,7 @@ def compare_shapes(trajectory, contour_logo):
         # Calcular la similitud entre los contornos
         similarity = cv2.matchShapes(contour_logo, contour_trajectory, cv2.CONTOURS_MATCH_I2, 0.0)
 
+        similarity = (1 - similarity)
     return similarity
 
 
@@ -158,10 +159,10 @@ def stream_video():
         frame_with_trajectory = draw_trajectory(frame_with_logo.copy(), trajectory)
 
         # ponemos si se ha conseguido
-        if similarity < 0.1:
+        if similarity > 0.5:
             cv2.putText(frame_with_trajectory, "CONSEGUIDO", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
         else:
-            print(similarity)
+            print(f'Porcentaje de similitud: {similarity*100}')
 
         # Mostrar el frame
         frame_flipped = frame_with_trajectory[:, ::-1, :]  # Voltear el frame horizontalmente
