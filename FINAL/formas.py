@@ -219,24 +219,33 @@ def is_green(frame, x, y):
 
 
 def dibujar_forma(tipo, x, y, w, h, frame):
-    # pintamos un punto en el centro
-    cv2.circle(frame, (x + w//2, y + h//2), 5, (0, 0, 255), -1)
 
     # pintamos la forma
     if tipo == 'cuadrado':
         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+        # pintamos un punto en el centro
+        cv2.circle(frame, (x + w//2, y + h//2), 5, (0, 0, 255), -1)
     elif tipo == 'triangulo':
         # Dibujae un triangulo
         points = np.array([[x + w//2, y], [x, y + h], [x + w, y + h]])
         cv2.drawContours(frame, [points], 0, (0, 0, 255), 2)
+
+        # pintamos un punto en el centro
+        cv2.circle(frame, (x + w//2, y + h//2), 5, (0, 0, 255), -1)
 
     elif tipo == 'estrella':
         # dibujar una estrella
         points = np.array([[x + w//2, y], [x + w//3, y + h], [x + 2*w//3, y + h], [x, y + h//3], [x + w, y + h//3]])
         cv2.drawContours(frame, [points], 0, (0, 0, 255), 2)
 
+        # pintamos un punto en el centro
+        cv2.circle(frame, (x + w//2, y + h//2), 5, (0, 0, 255), -1)
+
     elif tipo == 'circulo':
         cv2.circle(frame, (x, y), w, (0, 255, 0), 2)
+
+        # pintamos un punto en el centro
+        cv2.circle(frame, (x, y), 5, (0, 0, 255), -1)
 
 
 def tracker_objetos(picam):
