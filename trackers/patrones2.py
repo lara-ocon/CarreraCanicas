@@ -196,7 +196,10 @@ def stream_video():
     picam.preview_configuration.align()
     picam.configure("preview")
     picam.start()
-    prev_x1, prev_y1 = None, None
+    prev_x1, prev_y1, prev_x2, prev_y2, prev_x3, prev_y3 = None, None, None, None, None, None
+    x1, y1, w1, h1 = None, None, None, None
+    x2, y2, w2, h2 = None, None, None, None
+    x3, y3, w3, h3 = None, None, None, None
     prev_x2, prev_y2 = None, None
     prev_x3, prev_y3 = None, None
     trajectory1 = []
