@@ -173,7 +173,7 @@ def stream_video():
         frame_with_trajectory = draw_trajectory(frame_with_logo.copy(), trajectory)
 
         # ponemos si se ha conseguido
-        if similarity < 0.1:
+        if similarity < 8.5:
             cv2.putText(frame_with_trajectory, "CONSEGUIDO", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
         else:
             print(f'Porcentaje de similitud: {similarity}')
