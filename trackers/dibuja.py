@@ -104,8 +104,10 @@ def stream_video():
 
         frame_with_text = cv2.putText(frame_with_trajectory, texto_video, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
-        cv2.imshow("picam", frame_with_text)
+        # Mostramos el frame flipeado (espejo)
         
+        cv2.imshow("picam", frame_with_text[:, ::-1, :])
+
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
