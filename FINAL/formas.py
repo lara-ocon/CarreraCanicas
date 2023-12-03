@@ -72,14 +72,14 @@ def tracker_cuadrado_amarillo(frame, prev_x, prev_y):
     return frame, prev_x, prev_y, x, y, w, h
 
 # TRACKER TRIANGULO VERDE
-def tracker_triangulo_verde(frame, prev_x, prev_y):
+def tracker_triangulo_naranja(frame, prev_x, prev_y):
     
         # Convertir el frame de BGR a HSV
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
     
         # color en HSV (azul)
-        lower_color = LOWER_COLOR_GREEN
-        upper_color = UPPER_COLOR_GREEN
+        lower_color = LOWER_COLOR_ORANGE
+        upper_color = UPPER_COLOR_ORANGE
     
         # Crear una máscara para el color que nos pasan y aplicarla al frame
         mask = cv2.inRange(hsv, lower_color, upper_color)
@@ -183,7 +183,7 @@ def dibujar_forma(tipo, x, y, w, h, frame):
             # pintamos un punto en el centro
             cv2.circle(frame, (x, y), 5, (0, 0, 255), -1)
         except:
-            print(x, y, w, h)
+            pass
 
 
 def tracker_objetos(picam):
@@ -208,7 +208,7 @@ def tracker_objetos(picam):
         
         # Rastreamos los 4 objetos
         frame, prev_x_cuadrado, prev_y_cuadrado, x_cuadrado, y_cuadrado, w_cuadrado, h_cuadrado = tracker_cuadrado_amarillo(frame, prev_x_cuadrado, prev_y_cuadrado)
-        frame, prev_x_triangulo, prev_y_triangulo, x_triangulo, y_triangulo, w_triangulo, h_triangulo = tracker_triangulo_verde(frame, prev_x_triangulo, prev_y_triangulo)
+        frame, prev_x_triangulo, prev_y_triangulo, x_triangulo, y_triangulo, w_triangulo, h_triangulo = tracker_triangulo_naranja(frame, prev_x_triangulo, prev_y_triangulo)
         frame, prev_x_circulo, prev_y_circulo, x_circulo, y_circulo, w_circulo, h_circulo = tracker_circulo_azul(frame, prev_x_circulo, prev_y_circulo)
 
         # Dibujamos los objetos encontrados
