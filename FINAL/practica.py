@@ -26,6 +26,7 @@ if __name__ == "__main__":
 
     while not desbloqueado:
         frame = picam.capture_array()
+        # detectamos el patrón
         desbloqueado = detector.detectar_patron(frame, patron, not_patron)
     
     # esperamos 3 segundos y paramos la grabación
