@@ -40,6 +40,8 @@ def tracker_cuadrado_amarillo(frame, prev_x, prev_y, trajectory, is_tracking):
     # Encontrar contornos en la máscara
     contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
+    x, y, w, h = None, None, None, None
+
     # Si se detecta algún contorno comprobamos que sea un cuadrado
     if contours:
 
@@ -90,6 +92,8 @@ def tracker_triangulo_azul(frame, prev_x, prev_y, trajectory, is_tracking):
     # Encontrar contornos en la máscara
     contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
+    x, y, w, h = None, None, None, None
+
     # Si se detecta algún contorno comprobamos que sea un triángulo
     if contours:
 
@@ -134,6 +138,8 @@ def tracker_circulo_verde(frame, prev_x, prev_y, trajectory, is_tracking):
 
     # Encontrar contornos en la máscara
     contours, _ = cv2.findContours(mask1, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    x, y, radius = None, None, None
 
     # Si se detecta algún contorno comprobamos que sea un círculo
     if contours:
@@ -196,10 +202,7 @@ def stream_video():
     picam.preview_configuration.align()
     picam.configure("preview")
     picam.start()
-    prev_x1, prev_y1, prev_x2, prev_y2, prev_x3, prev_y3 = None, None, None, None, None, None
-    x1, y1, w1, h1 = None, None, None, None
-    x2, y2, w2, h2 = None, None, None, None
-    x3, y3, w3, h3 = None, None, None, None
+    prev_x1, prev_y1 = None, None
     prev_x2, prev_y2 = None, None
     prev_x3, prev_y3 = None, None
     trajectory1 = []
