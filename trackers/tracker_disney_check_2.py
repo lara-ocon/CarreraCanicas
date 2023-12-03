@@ -103,7 +103,7 @@ def overlay_disney_logo(frame):
     else:
         print("Las coordenadas de superposición exceden las dimensiones del video.")
     
-    return frame
+    return frame, logo_mask_resized
 
 
 def compare_shapes(trajectory, contour_logo):
@@ -121,7 +121,21 @@ def compare_shapes(trajectory, contour_logo):
     return similarity
 
 
+def obtain_logo_mask_resized():
+    
+    disney_logo = cv2.imread('disney-channel-logo.png', -1)  # Ruta de la imagen del logo
+    disney_logo_gray = cv2.cvtColor(disney_logo, cv2.COLOR_BGR2GRAY)
+    _, disney_logo_thresh = cv2.threshold(disney_logo_gray, 1, 255, cv2.THRESH_BINARY)
+    contours_logo, _ = cv2.findContours(disney_logo_thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    contour_logo = max(contours_logo, key=cv2.contourArea)
+
+    # Redimensionar la máscara del logo para que coincida con el tamaño del logo
+    logo_mask_resized = cv2.resize(disney_logo_thresh, (400, 400))
+
+    return logo_mask_resized
+
 def obtain_logo_contour(logo_mask_resized):
+
     disney_logo = cv2.imread('disney-channel-logo.png', -1)  # Ruta de la imagen del logo
     disney_logo_gray = cv2.cvtColor(disney_logo, cv2.COLOR_BGR2GRAY)
     _, disney_logo_thresh = cv2.threshold(disney_logo_gray, 1, 255, cv2.THRESH_BINARY)
@@ -141,7 +155,8 @@ def stream_video():
     prev_x, prev_y = None, None
     trajectory = []
 
-    contour_logo = obtain_logo_contour()
+    logo_mask_resized = obtain_logo_mask_resized()
+    contour_logo = obtain_logo_contour(logo_mask_resized)
 
     while True:
         frame = picam.capture_array()
