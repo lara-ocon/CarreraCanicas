@@ -114,14 +114,19 @@ def overlay_disney_logo(frame):
 
     else:
         print("Las coordenadas de superposición exceden las dimensiones del video.")
+        overlap_percentage = 0
     
     return frame, overlap_percentage
 
 
 # comparamos la trayectoria con el logo
 def compare_trajectory_with_logo(trajectory, logo_mask_resized):
+    # Creamos una máscara para la trayectoria
+    trajectory_mask = np.zeros_like(logo_mask_resized, dtype=np.uint8)
+    cv2.polylines(trajectory_mask, [np.array(trajectory, dtype=np.int32)], False, 255, thickness=10)
+
     # Suma de píxeles blancos en la trayectoria superpuesta con el logo
-    overlapping_pixels = np.sum(trajectory[:, :, 0] * (logo_mask_resized / 255.0))
+    overlapping_pixels = np.sum(trajectory_mask * (logo_mask_resized / 255.0))
 
     # Calcula el porcentaje de superposición
     total_pixels = np.sum(logo_mask_resized / 255.0)
