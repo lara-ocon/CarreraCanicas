@@ -2,6 +2,9 @@ import cv2
 from picamera2 import Picamera2
 import numpy as np
 
+# umbral superposicion
+UMBRAL_SUPERPOSICION = 0.5
+
 # Rangos de colores en HSV
 LOWER_COLOR_BLUE = np.array([90, 50, 50])
 UPPER_COLOR_BLUE = np.array([130, 255, 255])
@@ -100,10 +103,19 @@ def overlay_disney_logo(frame):
             frame[y1:y2, x1:x2, c] = (logo_resized[:, :, c] * (logo_mask_resized / 255.0)) + \
                                      (frame[y1:y2, x1:x2, c] * (1.0 - (logo_mask_resized / 255.0)))
 
+        #  Convertimos la region superpuesta a escala de grises
+        overlap_gray = cv2.cvtColor(frame[y1:y2, x1:x2], cv2.COLOR_BGR2GRAY)
+
+        # Aplicamos un umbral para obtener la trayectoria en la regin superpuesta
+        _, overlap_thresh = cv2.threshold(overlap_gray, 1, 255, cv2.THRESH_BINARY)
+
+        # comparamos la trayectoria con la region superpuesta del logo
+        overlap_percentage = compare_trajectory_with_logo(overlap_thresh, logo_mask_resized)
+
     else:
         print("Las coordenadas de superposición exceden las dimensiones del video.")
     
-    return frame, logo_resized, logo_mask_resized
+    return frame, overlap_percentage
 
 
 # comparamos la trayectoria con el logo
@@ -134,15 +146,23 @@ def stream_video():
         # Realizar el seguimiento del círculo
         frame, prev_x, prev_y, trajectory = tracker(frame, prev_x, prev_y, trajectory, is_tracking)
 
-        # Superponer el logo de Disney Channel en el video
-        frame_with_logo, logo_resized, logo_mask_resized = overlay_disney_logo(frame)
-
         # Dibujar la trayectoria en el frame
-        frame_with_trajectory = draw_trajectory(frame_with_logo.copy(), trajectory)
+        frame_with_trajectory = draw_trajectory(frame.copy(), trajectory)
+
+        # Superponer el logo de Disney Channel en el video
+        frame_with_logo, overlap_percentage = overlay_disney_logo(frame_with_trajectory)
+
+        if overlap_percentage > UMBRAL_SUPERPOSICION:
+            cv2.putText(frame_with_logo, "CONSEGUIDO", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+        else:
+            cv2.putText(frame_with_logo, "NO CONSEGUIDO", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
         # Mostrar el frame
-        frame_flipped = frame_with_trajectory[:, ::-1, :]  # Voltear el frame horizontalmente
+        frame_flipped = frame_with_logo[:, ::-1, :]  # Voltear el frame horizontalmente
         cv2.imshow("picam", frame_flipped)
+
+        print(f"Precisión de superposición: {overlap_percentage:.2f}%")
+
 
         # Detectar tecla pulsada
         key = cv2.waitKey(1)

@@ -147,7 +147,7 @@ def tracker_circulo_verde(frame, prev_x, prev_y, trajectory, is_tracking):
         largest_contour = max(contours, key=cv2.contourArea)
         ((x, y), radius) = cv2.minEnclosingCircle(largest_contour)
         # Asegurarse de que el radio sea lo suficientemente grande para ser considerado como el círculo
-        if radius > 10:
+        if radius > 50:
             print('He detectado un circulo')
             # Convertir las coordenadas a números enteros
             x, y, radius = int(x), int(y), int(radius)
@@ -164,6 +164,8 @@ def tracker_circulo_verde(frame, prev_x, prev_y, trajectory, is_tracking):
                     trajectory.append((x, y))
             # Actualizar las coorden
             prev_x, prev_y = x, y
+        else:
+            radius = None
 
     return frame, prev_x, prev_y, trajectory, x, y, radius
 
