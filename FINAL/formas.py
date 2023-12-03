@@ -178,8 +178,10 @@ def tracker_circulo_verde(frame, prev_x, prev_y):
     if circles is not None:
         max_radius = 0
 
-        for circle in circles[0]:
-            center_x, center_y, radius = circle
+        circles = np.uint16(np.around(circles))
+
+        for circle in circles[0 , :]:
+            center_x, center_y, radius = circle[0], circle[1], circle[2]
             # comprobamos que el color del centro del circulo sea verde
             if is_green(frame, center_x, center_y):
                 if radius > max_radius:
