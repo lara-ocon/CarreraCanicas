@@ -148,6 +148,7 @@ def tracker_circulo_verde(frame, prev_x, prev_y, trajectory, is_tracking):
         ((x, y), radius) = cv2.minEnclosingCircle(largest_contour)
         # Asegurarse de que el radio sea lo suficientemente grande para ser considerado como el círculo
         if radius > 10:
+            print('He detectado un circulo')
             # Convertir las coordenadas a números enteros
             x, y, radius = int(x), int(y), int(radius)
             # Dibujar el círculo y su centro
@@ -227,7 +228,7 @@ def stream_video():
         if x2 is not None and y2 is not None:
             frame = dibujar_objeto(frame, x2, y2, w2, h2, "triangulo", prev_x2, prev_y2, trajectory2, is_tracking)
 
-        if x3 is not None and y3 is not None:
+        if None not in [x3, y3, radius]:
             frame = dibujar_objeto(frame, x3, y3, radius, radius, "circulo", prev_x3, prev_y3, trajectory3, is_tracking)
 
         cv2.imshow("picam", frame)
