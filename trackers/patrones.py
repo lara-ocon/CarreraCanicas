@@ -63,7 +63,7 @@ def tracker_cuadrado_amarillo(frame, prev_x, prev_y, trajectory, is_tracking):
             # Dibujar la trayectoria
             if prev_x is not None and prev_y is not None:
                 cv2.line(frame, (prev_x, prev_y), (x + w // 2, y + h // 2), (0, 0, 255), 5)
-                cv2.putText(frame, "1", (x + w // 2, y + h // 2), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
+                cv2.putText(frame, "1", (x + w // 2, y + h // 2), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
                 # Almacenar las coordenadas para la trayectoria
                 if is_tracking == True:
@@ -113,7 +113,7 @@ def tracker_triangulo_azul(frame, prev_x, prev_y, trajectory, is_tracking):
             # Dibujar la trayectoria
             if prev_x is not None and prev_y is not None:
                 cv2.line(frame, (prev_x, prev_y), (x + w // 2, y + h // 2), (0, 0, 255), 5)
-                cv2.putText(frame, "2", (x + w // 2, y + h // 2), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
+                cv2.putText(frame, "2", (x + w // 2, y + h // 2), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
                 # Almacenar las coordenadas para la trayectoria
                 if is_tracking == True:
@@ -156,7 +156,7 @@ def tracker_circulo_verde(frame, prev_x, prev_y, trajectory, is_tracking):
             # Dibujar la trayectoria
             if prev_x is not None and prev_y is not None:
                 cv2.line(frame, (prev_x, prev_y), (x, y), (0, 0, 255), 5)
-                cv2.putText(frame, "3", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
+                cv2.putText(frame, "3", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
                 # Almacenar las coordenadas para la trayectoria
                 if is_tracking == True:
                     trajectory.append((x, y))
