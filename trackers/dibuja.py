@@ -9,8 +9,12 @@ UPPER_COLOR_BLUE = np.array([130, 255, 255])
 # TRACKER
 def tracker(frame, prev_x, prev_y, trajectory, is_tracking):
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-    lower_color = LOWER_COLOR_BLUE
-    upper_color = UPPER_COLOR_BLUE
+    lower_color = LOWER_COLOR_YELLOW
+    upper_color = UPPER_COLOR_YELLOW
+
+    LOWER_COLOR_YELLOW = np.array([20, 100, 100])
+    UPPER_COLOR_YELLOW = np.array([30, 255, 255])
+
     mask = cv2.inRange(hsv, lower_color, upper_color)
     contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
@@ -101,12 +105,13 @@ def stream_video():
                 trajectory = []
         elif key == ord('q'):
             break
+        
+        flipped_frame = frame_with_trajectory[:, ::-1, :]
 
-        frame_with_text = cv2.putText(frame_with_trajectory, texto_video, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+        frame_with_text = cv2.putText(flipped_frame, texto_video, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
         # Mostramos el frame flipeado (espejo)
-        
-        cv2.imshow("picam", frame_with_text[:, ::-1, :])
+        cv2.imshow("picam", frame_with_text)
 
     cv2.destroyAllWindows()
 
