@@ -58,12 +58,12 @@ def tracker_cuadrado_amarillo(frame, prev_x, prev_y, trajectory, is_tracking):
             x, y, w, h = cv2.boundingRect(approx)
 
             # Dibujar el rectángulo y su centro
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            # cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
             # Dibujar la trayectoria
             if prev_x is not None and prev_y is not None:
-                cv2.line(frame, (prev_x, prev_y), (x + w // 2, y + h // 2), (0, 0, 255), 5)
-                cv2.putText(frame, "1", (x + w // 2, y + h // 2), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
+                # cv2.line(frame, (prev_x, prev_y), (x + w // 2, y + h // 2), (0, 0, 255), 5)
+                # cv2.putText(frame, "1", (x + w // 2, y + h // 2), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
 
                 # Almacenar las coordenadas para la trayectoria
                 if is_tracking == True:
@@ -72,7 +72,7 @@ def tracker_cuadrado_amarillo(frame, prev_x, prev_y, trajectory, is_tracking):
             # Actualizar las coordenadas previas
             prev_x, prev_y = x + w // 2, y + h // 2
 
-    return frame, prev_x, prev_y, trajectory
+    return frame, prev_x, prev_y, trajectory, x, y, w, h
 
 
 def tracker_triangulo_azul(frame, prev_x, prev_y, trajectory, is_tracking):
@@ -107,13 +107,8 @@ def tracker_triangulo_azul(frame, prev_x, prev_y, trajectory, is_tracking):
             # Encontrar el rectángulo más pequeño que contiene el polígono
             x, y, w, h = cv2.boundingRect(approx)
 
-            # Dibujar el rectángulo y su centro
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-
-            # Dibujar la trayectoria
+            # Guardar la trayectoria
             if prev_x is not None and prev_y is not None:
-                cv2.line(frame, (prev_x, prev_y), (x + w // 2, y + h // 2), (0, 0, 255), 5)
-                cv2.putText(frame, "2", (x + w // 2, y + h // 2), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
 
                 # Almacenar las coordenadas para la trayectoria
                 if is_tracking == True:
@@ -122,7 +117,7 @@ def tracker_triangulo_azul(frame, prev_x, prev_y, trajectory, is_tracking):
             # Actualizar las coordenadas previas
             prev_x, prev_y = x + w // 2, y + h // 2
 
-    return frame, prev_x, prev_y, trajectory
+    return frame, prev_x, prev_y, trajectory, x, y, w, h
 
 
 def tracker_circulo_verde(frame, prev_x, prev_y, trajectory, is_tracking):
@@ -136,7 +131,6 @@ def tracker_circulo_verde(frame, prev_x, prev_y, trajectory, is_tracking):
 
     # Crear una máscara para el color que nos pasan y aplicarla al frame
     mask1 = cv2.inRange(hsv, lower_color, upper_color)
-    mask2 = cv2.inRange(hsv, lower_color, upper_color)
 
     # Encontrar contornos en la máscara
     contours, _ = cv2.findContours(mask1, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -151,22 +145,42 @@ def tracker_circulo_verde(frame, prev_x, prev_y, trajectory, is_tracking):
             # Convertir las coordenadas a números enteros
             x, y, radius = int(x), int(y), int(radius)
             # Dibujar el círculo y su centro
-            cv2.circle(frame, (x, y), radius, (0, 255, 0), 2)
-            cv2.circle(frame, (x, y), 5, (0, 0, 255), -1)
+            # cv2.circle(frame, (x, y), radius, (0, 255, 0), 2)
+            # cv2.circle(frame, (x, y), 5, (0, 0, 255), -1)
+
             # Dibujar la trayectoria
             if prev_x is not None and prev_y is not None:
-                cv2.line(frame, (prev_x, prev_y), (x, y), (0, 0, 255), 5)
-                cv2.putText(frame, "3", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
+                # cv2.line(frame, (prev_x, prev_y), (x, y), (0, 0, 255), 5)
+                # cv2.putText(frame, "3", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
                 # Almacenar las coordenadas para la trayectoria
                 if is_tracking == True:
                     trajectory.append((x, y))
             # Actualizar las coorden
             prev_x, prev_y = x, y
 
-    return frame, prev_x, prev_y, trajectory
+    return frame, prev_x, prev_y, trajectory, x, y, radius
 
 
+def dibujar_objeto(frame, x, y, w, h, type, prev_x, prev_y, trajectory, is_tracking):
 
+    # en el circulo, w y h son el radio
+    if type == "cuadrado":
+        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+    elif type == "triangulo":
+        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+    elif type == "circulo":
+        cv2.circle(frame, (x,y), w, (0, 255, 0), 2)
+        cv2.circle(frame, (x,y), 5, (0, 0, 255), -1)
+
+    # ponemos el tipo de objeto
+    cv2.putText(frame, type, (x + w // 2, y + h // 2), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
+
+    # dibujamos la trayectoria
+    cv2.line(frame, (prev_x, prev_y), (x + w // 2, y + h // 2), (0, 0, 255), 5)
+
+    return frame
+
+    
 # Dibujar la trayectoria del objeto en el frame
 def draw_trajectory(frame, trajectory):
     # Dibujar la trayectoria almacenada
@@ -182,18 +196,28 @@ def stream_video():
     picam.preview_configuration.align()
     picam.configure("preview")
     picam.start()
-    prev_x, prev_y = None, None
-    trajectory = []
+    prev_x1, prev_y1 = None, None
+    prev_x2, prev_y2 = None, None
+    prev_x3, prev_y3 = None, None
+    trajectory1 = []
+    trajectory2 = []
+    trajectory3 = []
+    trajectories = [trajectory1, trajectory2, trajectory3]
+    prev_x = [prev_x1, prev_x2, prev_x3]
+    prev_y = [prev_y1, prev_y2, prev_y3]
     is_tracking = False
     while True:
         frame = picam.capture_array()
         
         # Realizar el seguimiento de de los objetos
-        frame, prev_x, prev_y, trajectory1 = tracker_cuadrado_amarillo(frame, prev_x, prev_y, trajectory, is_tracking)
-        frame, prev_x, prev_y, trajectory2 = tracker_triangulo_azul(frame, prev_x, prev_y, trajectory, is_tracking)
-        frame, prev_x, prev_y, trajectory3 = tracker_circulo_verde(frame, prev_x, prev_y, trajectory, is_tracking)
+        frame, prev_x1, prev_y1, trajectory1, x1, y1, w1, h1 = tracker_cuadrado_amarillo(frame, prev_x1, prev_y1, trajectory1, is_tracking)
+        frame, prev_x2, prev_y2, trajectory2, x2, y2, w2, h2 = tracker_triangulo_azul(frame, prev_x2, prev_y2, trajectory2, is_tracking)
+        frame, prev_x3, prev_y3, trajectory3, x3, y3, w3, h3 = tracker_circulo_verde(frame, prev_x3, prev_y3, trajectory3, is_tracking)
 
-        # frame_with_trajectory = draw_trajectory(frame.copy(), trajectory)
+        # Dibubjamos los objetos
+        frame = dibujar_objeto(frame, x1, y1, w1, h1, "cuadrado", prev_x1, prev_y1, trajectory1, is_tracking)
+        frame = dibujar_objeto(frame, x2, y2, w2, h2, "triangulo", prev_x2, prev_y2, trajectory2, is_tracking)
+        frame = dibujar_objeto(frame, x3, y3, w3, h3, "circulo", prev_x3, prev_y3, trajectory3, is_tracking)
 
         cv2.imshow("picam", frame)
 
@@ -203,9 +227,13 @@ def stream_video():
             is_tracking = True
         elif key == ord('e'):
             is_tracking = False
-            trajectory = []
-            prev_x = None
-            prev_y = None
+            
+            # reiniciamos las trayectorias
+            for i in range(len(trajectories)):
+                trajectories[i] = []
+                prev_x[i] = None
+                prev_y[i] = None
+
         elif key == ord('q'):
             break
     cv2.destroyAllWindows()
