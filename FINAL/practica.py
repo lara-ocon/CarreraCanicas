@@ -27,7 +27,7 @@ if __name__ == "__main__":
     while not desbloqueado:
         frame = picam.capture_array()
         # detectamos el patrón
-        desbloqueado = detector.detectar_patron(frame, patron, not_patron)
+        desbloqueado = detector.detectar_patron(patron, not_patron, picam)
     
     # esperamos 3 segundos y paramos la grabación
     cv2.waitKey(3000)
