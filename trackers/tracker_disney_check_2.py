@@ -103,7 +103,7 @@ def overlay_disney_logo(frame):
     else:
         print("Las coordenadas de superposición exceden las dimensiones del video.")
     
-    return frame, logo_mask_resized
+    return frame
 
 
 def compare_shapes(trajectory, contour_logo):
