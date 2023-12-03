@@ -154,7 +154,7 @@ def tracker_triangulo_azul(frame, prev_x, prev_y):
 
 
 
-def tracker_circulo_azul(frame, prev_x, prev_y, trajectory, is_tracking):
+def tracker_circulo_azul(frame, prev_x, prev_y):
 
     # Convertir el frame de BGR a HSV
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
@@ -193,9 +193,6 @@ def tracker_circulo_azul(frame, prev_x, prev_y, trajectory, is_tracking):
                     # Dibujar el círculo y su centro
                     # cv2.circle(frame, (x, y), radius, (0, 255, 0), 2)
                     # cv2.circle(frame, (x, y), 5, (0, 0, 255), -1)
-
-                    if is_tracking == True:
-                        trajectory.append((x, y))
 
                     # Actualizar las coorden
                     prev_x, prev_y = x, y
