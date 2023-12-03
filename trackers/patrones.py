@@ -62,7 +62,7 @@ def tracker_cuadrado_amarillo(frame, prev_x, prev_y, trajectory, is_tracking):
 
             # Dibujar la trayectoria
             if prev_x is not None and prev_y is not None:
-                cv2.line(frame, (prev_x, prev_y), (x + w // 2, y + h // 2), (0, 0, 255), 5)
+                # cv2.line(frame, (prev_x, prev_y), (x + w // 2, y + h // 2), (0, 0, 255), 5)
                 cv2.putText(frame, "1", (x + w // 2, y + h // 2), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
                 # Almacenar las coordenadas para la trayectoria
@@ -107,12 +107,12 @@ def tracker_triangulo_azul(frame, prev_x, prev_y, trajectory, is_tracking):
             # Encontrar el rectángulo más pequeño que contiene el polígono
             x, y, w, h = cv2.boundingRect(approx)
 
-            # Dibujar el rectángulo y su centro
+            # Dibujar el triangulo y su centro
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
             # Dibujar la trayectoria
             if prev_x is not None and prev_y is not None:
-                cv2.line(frame, (prev_x, prev_y), (x + w // 2, y + h // 2), (0, 0, 255), 5)
+                # cv2.line(frame, (prev_x, prev_y), (x + w // 2, y + h // 2), (0, 0, 255), 5)
                 cv2.putText(frame, "2", (x + w // 2, y + h // 2), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
                 # Almacenar las coordenadas para la trayectoria
@@ -155,7 +155,7 @@ def tracker_circulo_verde(frame, prev_x, prev_y, trajectory, is_tracking):
             cv2.circle(frame, (x, y), 5, (0, 0, 255), -1)
             # Dibujar la trayectoria
             if prev_x is not None and prev_y is not None:
-                cv2.line(frame, (prev_x, prev_y), (x, y), (0, 0, 255), 5)
+                # cv2.line(frame, (prev_x, prev_y), (x, y), (0, 0, 255), 5)
                 cv2.putText(frame, "3", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
                 # Almacenar las coordenadas para la trayectoria
                 if is_tracking == True:
