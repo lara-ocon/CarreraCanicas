@@ -17,10 +17,6 @@ def iniciar_grabacion():
 
 if __name__ == "__main__":
 
-    print("Calibrando...")
-    calibration.calibrate()
-    print("Calibrado")
-
     print("Pulsa para comenzar la detección de la secuencia")
 
     picam = iniciar_grabacion()
