@@ -1,6 +1,7 @@
 import detector 
 import cv2
 import calibration
+import tracker_disney_check_2 as disney_tracker
 from picamera2 import Picamera2
 
 
@@ -20,8 +21,9 @@ if __name__ == "__main__":
     print("Pulsa para comenzar la detección de la secuencia")
 
     picam = iniciar_grabacion()
-    patron, not_patron = detector.obtener_patrones()
 
+    # 1) Detectar la secuencia de patrones
+    patron, not_patron = detector.obtener_patrones()
     desbloqueado = False
 
     while not desbloqueado:
@@ -29,8 +31,13 @@ if __name__ == "__main__":
         # detectamos el patrón
         desbloqueado = detector.detectar_patron(patron, not_patron, picam)
     
-    # esperamos 3 segundos y paramos la grabación
-    cv2.waitKey(3000)
+    # esperamos 3 segundos y pasamos a la siguiente fase
+    cv2.waitKey(5000)
+
+    # 2) Dibujar el patron de la pantalla
+    disney_tracker.initialize_tracker(picam)
+    cv2.destroyAllWindows()
+
     picam.stop()
     
 
