@@ -146,12 +146,8 @@ def tracker_circulo_azul(frame, prev_x, prev_y):
 
                 if radius_new > 30 and radius_new > radius:
                     radius = radius_new
-                    print('He detectado un circulo')
                     # Convertir las coordenadas a números enteros
                     x, y, radius = int(x), int(y), int(radius)
-                    # Dibujar el círculo y su centro
-                    # cv2.circle(frame, (x, y), radius, (0, 255, 0), 2)
-                    # cv2.circle(frame, (x, y), 5, (0, 0, 255), -1)
 
                     # Actualizar las coorden
                     prev_x, prev_y = x, y
@@ -187,7 +183,6 @@ def dibujar_forma(tipo, x, y, w, h, frame):
             # pintamos un punto en el centro
             cv2.circle(frame, (x, y), 5, (0, 0, 255), -1)
         except:
-            print('no se ha podido pintar el circulo')
             print(x, y, w, h)
 
 
