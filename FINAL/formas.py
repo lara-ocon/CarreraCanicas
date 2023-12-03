@@ -100,9 +100,10 @@ def tracker_estrella_verde(frame, prev_x, prev_y):
 
         # Aproximar el contorno a un polígono
         approx = cv2.approxPolyDP(largest_contour, 0.02 * perimeter, True)
-
+        print('veo verde')
         # Si el polígono tiene 10 vértices, es una estrella
         if len(approx) == 10:
+            print('estrella')
             # Encontrar el rectángulo más pequeño que contiene el polígono
             x, y, w, h = cv2.boundingRect(approx)
     
@@ -179,10 +180,10 @@ def tracker_circulo_verde(frame, prev_x, prev_y):
 
         for circle in circles[0]:
             center_x, center_y, radius = circle
-
             # comprobamos que el color del centro del circulo sea verde
             if is_green(frame, center_x, center_y):
                 if radius > max_radius:
+                    print('circulo')
                     max_radius = radius
                     x, y, w, h = center_x, center_y, radius, radius
 
@@ -225,6 +226,7 @@ def dibujar_forma(tipo, x, y, w, h, frame):
         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
         # pintamos un punto en el centro
         cv2.circle(frame, (x + w//2, y + h//2), 5, (0, 0, 255), -1)
+
     elif tipo == 'triangulo':
         # Dibujae un triangulo
         points = np.array([[x + w//2, y], [x, y + h], [x + w, y + h]])
@@ -242,10 +244,14 @@ def dibujar_forma(tipo, x, y, w, h, frame):
         cv2.circle(frame, (x + w//2, y + h//2), 5, (0, 0, 255), -1)
 
     elif tipo == 'circulo':
-        cv2.circle(frame, (x, y), w, (0, 255, 0), 2)
+        try: 
+            cv2.circle(frame, (x, y), w, (0, 255, 0), 2)
 
-        # pintamos un punto en el centro
-        cv2.circle(frame, (x, y), 5, (0, 0, 255), -1)
+            # pintamos un punto en el centro
+            cv2.circle(frame, (x, y), 5, (0, 0, 255), -1)
+        except:
+            print('no se ha podido pintar el circulo')
+            print(x, y, w, h)
 
 
 def tracker_objetos(picam):
