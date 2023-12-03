@@ -134,6 +134,7 @@ def compare_trajectory_with_logo(trajectory, logo_mask_resized):
 
     return overlap_percentage
 
+
 def stream_video():
     picam = Picamera2()
     picam.video_configuration.main.size = (640, 480)

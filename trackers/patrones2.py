@@ -134,38 +134,42 @@ def tracker_circulo_verde(frame, prev_x, prev_y, trajectory, is_tracking):
     upper_color = UPPER_COLOR_GREEN
 
     # Crear una máscara para el color que nos pasan y aplicarla al frame
-    mask1 = cv2.inRange(hsv, lower_color, upper_color)
+    mask = cv2.inRange(hsv, lower_color, upper_color)
 
     # Encontrar contornos en la máscara
-    contours, _ = cv2.findContours(mask1, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     x, y, radius = None, None, None
 
     # Si se detecta algún contorno comprobamos que sea un círculo
     if contours:
-        # Encontrar el contorno más grande (círculo)
-        largest_contour = max(contours, key=cv2.contourArea)
-        ((x, y), radius) = cv2.minEnclosingCircle(largest_contour)
-        # Asegurarse de que el radio sea lo suficientemente grande para ser considerado como el círculo
-        if radius > 50:
-            print('He detectado un circulo')
-            # Convertir las coordenadas a números enteros
-            x, y, radius = int(x), int(y), int(radius)
-            # Dibujar el círculo y su centro
-            # cv2.circle(frame, (x, y), radius, (0, 255, 0), 2)
-            # cv2.circle(frame, (x, y), 5, (0, 0, 255), -1)
 
-            # Dibujar la trayectoria
-            if prev_x is not None and prev_y is not None:
-                # cv2.line(frame, (prev_x, prev_y), (x, y), (0, 0, 255), 5)
-                # cv2.putText(frame, "3", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
-                # Almacenar las coordenadas para la trayectoria
-                if is_tracking == True:
-                    trajectory.append((x, y))
-            # Actualizar las coorden
-            prev_x, prev_y = x, y
-        else:
-            radius = None
+        for contour in contours:
+            area = cv2.contourArea(contour)
+            perimeter = cv2.arcLength(contour, True)
+            circularity = 4 * np.pi * area / (perimeter * perimeter)
+
+            if circularity > 0.85:  # Ajusta este umbral según tu definición de casi perfecto
+                ((x, y), radius) = cv2.minEnclosingCircle(contour)
+
+                if radius > 50:
+                    print('He detectado un circulo')
+                    # Convertir las coordenadas a números enteros
+                    x, y, radius = int(x), int(y), int(radius)
+                    # Dibujar el círculo y su centro
+                    # cv2.circle(frame, (x, y), radius, (0, 255, 0), 2)
+                    # cv2.circle(frame, (x, y), 5, (0, 0, 255), -1)
+
+                    if is_tracking == True:
+                        trajectory.append((x, y))
+
+                    # Actualizar las coorden
+                    prev_x, prev_y = x, y
+
+                    break # termina el bucle si encuentra un buen circulo
+                
+                else:
+                    radius = None
 
     return frame, prev_x, prev_y, trajectory, x, y, radius
 
