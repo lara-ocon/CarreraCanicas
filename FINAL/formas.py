@@ -63,8 +63,6 @@ def tracker_cuadrado_amarillo(frame, prev_x, prev_y):
 
         # Si el polígono tiene 4 vértices, es un cuadrado
         if len(approx) == 4:
-
-            print("Detecto CUADRADOOO")
             # Encontrar el rectángulo más pequeño que contiene el polígono
             x, y, w, h = cv2.boundingRect(approx)
     
