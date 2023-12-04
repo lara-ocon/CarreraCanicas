@@ -1,6 +1,7 @@
 import cv2
 from picamera2 import Picamera2
 import numpy as np
+import time
 
 # Rangos de colores en HSV
 LOWER_COLOR_BLUE = np.array([90, 50, 50])
@@ -244,7 +245,8 @@ def complete_figure(figure, picam, output_video):
             timer = 5
             break
     
-    if salir and timer < 5:
+    tiempo_inicial = time.time()
+    if salir and (time.time() - tiempo_inicial) > 5 and timer == 0:
         # Mostramos mensaje sobre el video
         frame = picam.capture_array()
 
@@ -264,13 +266,10 @@ def complete_figure(figure, picam, output_video):
 
         # Mostramos mensaje
         cv2.putText(frame_flipped, texto, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-
         cv2.imshow("picam", frame_flipped)
 
         # Escribimos en el video
         output_video.write(frame_flipped)
-
-        timer += 0.000001
 
 
     return salir
