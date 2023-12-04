@@ -195,12 +195,13 @@ def complete_figure(figure):
         frame_with_trajectory = draw_trajectory(frame_with_figure.copy(), trajectory)
 
         # flipeamos
-        frame_flipped = frame_with_trajectory[:, ::-1, :]
+        frame_flipped = cv2.flip(frame_with_trajectory, 1)
 
         # Mostramos mensaje
         cv2.putText(frame_flipped, texto, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
         cv2.imshow("picam", frame_flipped)
+
 
         # Detectar tecla pulsada
         key = cv2.waitKey(1)
