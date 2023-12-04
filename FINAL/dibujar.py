@@ -187,7 +187,7 @@ def compare_trajectory(trajectory, shape):
         return False
     
 
-def complete_figure(figure):
+def complete_figure(figure, picam):
 
     prev_x, prev_y = None, None
     trajectory = []
@@ -247,6 +247,6 @@ if __name__ == "__main__":
     picam.configure("preview")
     picam.start()
     
-    complete_figure("triangle")
+    complete_figure("triangle", picam)
 
     cv2.destroyAllWindows()

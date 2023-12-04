@@ -112,6 +112,9 @@ def detectar_patron(patron, not_patron, picam):
                     texto = f"Patron no detectado"
                     # frame = mostrar_texto(frame, "No se ha encontrado nada")
                     pass
+        
+        # flipeamos el frame
+        frame = cv2.flip(frame, 1)
 
         frame = mostrar_texto(frame, texto)
  

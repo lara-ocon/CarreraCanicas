@@ -39,7 +39,7 @@ if __name__ == "__main__":
     forma = formas.tracker_objetos(picam)
 
     # 3) Procedemos a dibujar la forma pedida
-    dibujar.complete_figure(forma)
+    dibujar.complete_figure(forma, picam)
 
     cv2.destroyAllWindows()
 

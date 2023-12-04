@@ -219,7 +219,7 @@ def tracker_objetos(picam):
             dibujar_forma('circulo', x_circulo, y_circulo, w_circulo, h_circulo, frame)
         
         # Mostramos el frame
-        cv2.imshow("picam", frame)
+        cv2.imshow("picam", frame[:, ::-1, :])
 
         # Si se pulsa una tecla y en ese momento solo hay 1 objeto en pantalla
         # nos quedamos con ese objeto y salimos del bucle
