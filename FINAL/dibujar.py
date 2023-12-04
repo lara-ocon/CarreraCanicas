@@ -87,12 +87,58 @@ def overlay_triangle(frame):
     return frame
 
 
+# Funcion para dibujar el logo de disney
+def overlay_disney_logo(frame):
+    # Cargar la imagen del logo de Disney Channel con transparencia
+    disney_logo = cv2.imread('disney-channel-logo.png', -1)  # Ruta de la imagen del logo
+
+    # giramos el logo horizontalmente(porque luego voltearemos el frame)
+    disney_logo = disney_logo[:, ::-1, :]
+
+    # Extraer los canales R, G, B de la imagen del logo y el canal alfa
+    logo_bgr = disney_logo[:, :, 0:3]
+    logo_mask = disney_logo[:, :, 3]
+
+    # Redimensionar el logo de Disney Channel para que se ajuste al tamaño deseado (más grande)
+    logo_resized = cv2.resize(logo_bgr, (400, 400))  # Ajusta el tamaño según sea necesario
+
+    # Redimensionar la máscara del logo para que coincida con el tamaño del logo
+    logo_mask_resized = cv2.resize(logo_mask, (400, 400))
+
+    # Obtener las coordenadas donde se superpondrá el logo en la esquina inferior
+    # lo ponemos en la esquina inferior derecha (despues voltearemos el frame para que se vea en la izquierda)
+    y1, y2 = frame.shape[0] - logo_resized.shape[0], frame.shape[0]  # Esquina inferior
+    # x1, x2 = 0, logo_resized.shape[1]  # Esquina izquierda
+    x1, x2 = frame.shape[1] - logo_resized.shape[1], frame.shape[1]  # Esquina derecha
+
+
+    # Verificar que las coordenadas no excedan las dimensiones de la imagen en blanco
+    if y2 - y1 <= frame.shape[0] and x2 - x1 <= frame.shape[1]:
+        # Superponer el logo en la esquina inferior del video respetando la transparencia
+        for c in range(0, 3):
+            frame[y1:y2, x1:x2, c] = (logo_resized[:, :, c] * (logo_mask_resized / 255.0)) + \
+                                     (frame[y1:y2, x1:x2, c] * (1.0 - (logo_mask_resized / 255.0)))
+
+    else:
+        print("Las coordenadas de superposición exceden las dimensiones del video.")
+    
+    return frame
+
+
 # Función para comparar la trayectoria con el cuadrado
-def compare_trajectory_square(trajectory):
+def compare_trajectory(trajectory, shape):
     # Crear un cuadrado perfecto en una imagen en blanco
     img1 = np.zeros((640, 480, 3), np.uint8)
     centro = (img1.shape[1] // 2, img1.shape[0] // 2)
-    cv2.rectangle(img1, (centro[0] - 100, centro[1] - 100), (centro[0] + 100, centro[1] + 100), (255, 0, 0), 20)
+
+    if shape == "square":
+        cv2.rectangle(img1, (centro[0] - 100, centro[1] - 100), (centro[0] + 100, centro[1] + 100), (255, 0, 0), 20)
+    elif shape == "triangle":
+        pts = np.array([[100, 300], [200, 200], [300, 300]], np.int32)
+        pts = pts.reshape((-1, 1, 2))
+        cv2.polylines(img1, [pts], True, (0, 255, 255), 5)
+    elif shape == "disney":
+        overlay_disney_logo(img1)
 
     # Crear una imagen en blanco y dibujar la trayectoria
     img2 = np.zeros((640, 480, 3), np.uint8)
@@ -118,14 +164,62 @@ def compare_trajectory_square(trajectory):
     
     # Si la distancia más pequeña es menor a un umbral, consideramos que el cuadrado está bien
     min_distance = min(distances)
-    print(min_distance, max(distances))
-    if min_distance < 0.1:  # Ajusta el umbral según sea necesario
+    print(min_distance)
+    if min_distance < 0.08:  # Ajusta el umbral según sea necesario
         return True
     else:
         return False
-
-
     
+
+def complete_figure(figure):
+
+    prev_x, prev_y = None, None
+    trajectory = []
+    is_tracking = False
+    texto = 'Pulsa "s" para comenzar a dibujar'
+    while True:
+        frame = picam.capture_array()
+        
+        # Realizar el seguimiento de de los objetos
+        frame, prev_x, prev_y, trajectory = tracker(frame, prev_x, prev_y, trajectory, is_tracking)
+
+        # Dibujar la forma que sea
+        if figure == "square":
+            frame_with_figure = overlay_square(frame)
+        elif figure == "triangle":
+            frame_with_figure = overlay_triangle(frame)
+        elif figure == "disney":
+            frame_with_figure = overlay_disney_logo(frame)
+
+        # Dibujar la trayectoria en el frame
+        frame_with_trajectory = draw_trajectory(frame_with_figure.copy(), trajectory)
+
+        # flipeamos
+        frame_flipped = frame_with_trajectory[:, ::-1, :]
+
+        # Mostramos mensaje
+        cv2.putText(frame_flipped, texto, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+
+        cv2.imshow("picam", frame_flipped)
+
+        # Detectar tecla pulsada
+        key = cv2.waitKey(1)
+        if key == ord('s'):
+            is_tracking = True
+            texto = 'Pulsa "e" para terminar de dibujar'
+        elif key == ord('e'):
+            # comprobamos si la trayectoria
+            if compare_trajectory(trajectory, figure):
+                texto = "La figura esta bien"
+            else:
+                texto = "La figura esta mal"
+
+            is_tracking = False
+            trajectory = []
+            prev_x = None
+            prev_y = None
+        elif key == ord('q'):
+            break
 
 if __name__ == "__main__":
 
@@ -135,41 +229,7 @@ if __name__ == "__main__":
     picam.preview_configuration.align()
     picam.configure("preview")
     picam.start()
-    prev_x, prev_y = None, None
-    trajectory = []
-    is_tracking = False
-    while True:
-        frame = picam.capture_array()
-        
-        # Realizar el seguimiento de de los objetos
-        frame, prev_x, prev_y, trajectory = tracker(frame, prev_x, prev_y, trajectory, is_tracking)
+    
+    complete_figure("disney")
 
-        # Dibujar la trayectoria en el frame
-        frame_with_trajectory = draw_trajectory(frame.copy(), trajectory)
-
-        # Dibujar un cuadrado
-        frame_with_square = overlay_square(frame_with_trajectory)
-
-        # comparamos la trayectoria con el cuadrado
-        if compare_trajectory_square(trajectory):
-            texto_video = "El cuadrado esta bien"
-        else:
-            texto_video = "El cuadrado esta mal"
-
-        frame_flipped = frame_with_square[:, ::-1, :]
-        # cv2.putText(frame_flipped, texto_video, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
-
-        cv2.imshow("picam", frame_flipped)
-
-        # Detectar tecla pulsada
-        key = cv2.waitKey(1)
-        if key == ord('s'):
-            is_tracking = True
-        elif key == ord('e'):
-            is_tracking = False
-            trajectory = []
-            prev_x = None
-            prev_y = None
-        elif key == ord('q'):
-            break
     cv2.destroyAllWindows()
