@@ -72,8 +72,9 @@ def draw_trajectory(frame, trajectory):
 
 # Funcion para dibujar 1 cuadrado sobre el video
 def overlay_square(frame):
-    # Dibujar un cuadrado
-    cv2.rectangle(frame, (100, 100), (200, 200), (255, 0, 0), 5)
+    # Dibujar un cuadrado en el centro y muy grande
+    centro = (frame.shape[1] // 2, frame.shape[0] // 2)
+    cv2.Rectange(frame, (centro[0] - 100, centro[1] - 100), (centro[0] + 100, centro[1] + 100), (255, 0, 0), 20)
     return frame
 
 
@@ -93,9 +94,10 @@ def compare_trajectory_square(trajectory):
     # y la imagen con la trayectoria y el cuadrado
 
     # hacemos una imagen en blanco
-    img1 = np.zeros((512, 512, 3), np.uint8)   
+    img1 = np.zeros((640, 480, 3), np.uint8)
     # dibujamos el cuadrado perfecto
-    cv2.rectangle(img1, (100, 100), (200, 200), (255, 0, 0), 5)
+    centro = (img1.shape[1] // 2, img1.shape[0] // 2)
+    cv2.Rectange(img1, (centro[0] - 100, centro[1] - 100), (centro[0] + 100, centro[1] + 100), (255, 0, 0), 20)
 
     # hacemos una imagen en blanco
     img2 = np.zeros((512, 512, 3), np.uint8)
