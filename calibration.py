@@ -33,7 +33,8 @@ def get_circle_centers(chessboard_shape, dx, dy):
     return [[(i%chessboard_shape[0])*dx, (i//chessboard_shape[0])*dy, 0] for i in range(np.prod(chessboard_shape))]
 
 
-if __name__ == '__main__':
+def calibrate():
+    
     # cargamos las imagenes
     filenames = [f'calibracion/img{i}.jpg' for i in range(1,24)]
     images = load_images(filenames)
@@ -47,7 +48,7 @@ if __name__ == '__main__':
     num_valid_images = len(valid_centers)
 
     # obtain their real points
-    real_points = get_circle_centers2((5, 4), 20, 20)
+    real_points = get_circle_centers((5, 4), 20, 20)
     real_points = np.asarray([real_points for i in range(num_valid_images)], dtype=np.float32)
 
     # We are going to convert our coordinates list in the reference system to numpy array
@@ -67,8 +68,11 @@ if __name__ == '__main__':
     print(intrinsics, '\n')
     print('Distortion coefficients:')
     print(dist_coeffs, '\n')
-    print('Extrinsic parameters:')
-    print(extrinsics, '\n')
+    # print('Extrinsic parameters:')
+    # print(extrinsics, '\n')
     print('RMS:')
     print(rms, '\n')
 
+
+if __name__ == '__main__':
+    calibrate()
