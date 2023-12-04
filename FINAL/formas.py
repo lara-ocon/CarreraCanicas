@@ -227,11 +227,11 @@ def tracker_objetos(picam):
         if key == ord('s'):
             if sum([x_cuadrado is not None, x_triangulo is not None, x_circulo is not None]) == 1:
                 if x_cuadrado is not None:
-                    return 'cuadrado'
+                    return 'square'
                 elif x_triangulo is not None:
-                    return 'triangulo'
+                    return 'triangle'
                 elif x_circulo is not None:
-                    return 'circulo'
+                    return 'disney'
         elif key == ord('q'):
             break
 
