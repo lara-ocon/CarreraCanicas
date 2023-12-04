@@ -185,7 +185,7 @@ def dibujar_forma(tipo, x, y, w, h, frame):
             pass
 
 
-def tracker_objetos(picam):
+def tracker_objetos(picam, output_video):
 
     # Inicializamos las coordenadas previas de los 4 objetos
     prev_x_cuadrado, prev_y_cuadrado = None, None
@@ -221,6 +221,9 @@ def tracker_objetos(picam):
         # Mostramos el frame
         cv2.imshow("picam", frame[:, ::-1, :])
 
+        # Guardamos el frame en el video
+        output_video.write(frame)
+
         # Si se pulsa una tecla y en ese momento solo hay 1 objeto en pantalla
         # nos quedamos con ese objeto y salimos del bucle
         key = cv2.waitKey(1)
@@ -247,9 +250,17 @@ if __name__ == "__main__":
     picam.configure("preview")
     picam.start()
 
+    output_file = "output_video_formas.mp4"
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    fps = 30
+    output_video = cv2.VideoWriter(output_file, fourcc, fps, (640, 480))
+
     # Trackeamos los objetos
-    forma, salir = tracker_objetos(picam)
+    forma, salir = tracker_objetos(picam, output_video)
 
     print("La forma es: ", forma)
 
+    output_video.release()
+
     cv2.destroyAllWindows()
+    picam.stop()

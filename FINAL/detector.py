@@ -29,7 +29,7 @@ def mostrar_texto(frame, texto):
  
  
 # funcion de deteccion de patron
-def detectar_patron(patron, not_patron, picam):
+def detectar_patron(patron, not_patron, picam, output_video):
     desbloqueado = False
     salir = False
  
@@ -119,6 +119,10 @@ def detectar_patron(patron, not_patron, picam):
         frame = mostrar_texto(frame, texto)
  
         cv2.imshow("picam", frame)
+
+        # guardamos el frame en el video de salida
+        output_video.write(frame)
+
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
  
@@ -127,6 +131,11 @@ def detectar_patron(patron, not_patron, picam):
  
 if __name__ == "__main__":
     patron, not_patron = obtener_patrones()
+
+    output_file = "output_video_detector.mp4"
+    codec = cv2.VideoWriter_fourcc(*"mp4v")
+    fps = 30
+    output_video = cv2.VideoWriter(output_file, codec, fps, (640, 480))
  
     picam = Picamera2()
     picam.video_configuration.main.size = (640, 480)
@@ -138,7 +147,12 @@ if __name__ == "__main__":
     desbloqueado = False
     while not desbloqueado:
         frame = picam.capture_array()
-        desbloqueado = detectar_patron(patron, not_patron, picam)
+        desbloqueado = detectar_patron(patron, not_patron, picam, output_video)
  
     print('Desbloqueado')
+    cv2.waitKey(5000)
+
+    output_video.release()
+
+    cv2.destroyAllWindows() 
     picam.stop()

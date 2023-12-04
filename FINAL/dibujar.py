@@ -186,7 +186,7 @@ def compare_trajectory(trajectory, shape):
         return False
     
 
-def complete_figure(figure, picam):
+def complete_figure(figure, picam, output_video):
     salir = False
     prev_x, prev_y = None, None
     trajectory = []
@@ -217,6 +217,9 @@ def complete_figure(figure, picam):
 
         cv2.imshow("picam", frame_flipped)
 
+        # Escribimos en el video
+        output_video.write(frame_flipped)
+
 
         # Detectar tecla pulsada
         key = cv2.waitKey(1)
@@ -246,7 +249,15 @@ if __name__ == "__main__":
     picam.preview_configuration.align()
     picam.configure("preview")
     picam.start()
+
+    output_filename = "output_video_dibuja.mp4"
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    fps = 30
+    output_video = cv2.VideoWriter(output_filename, fourcc, fps, (640, 480))
+
     
-    salir = complete_figure("triangle", picam)
+    salir = complete_figure("triangle", picam, output_video)
 
     cv2.destroyAllWindows()
+    output_video.release()
+    picam.stop()
