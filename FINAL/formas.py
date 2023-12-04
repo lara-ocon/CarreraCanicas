@@ -214,7 +214,7 @@ def tracker_objetos(picam, output_video):
 
         # Dibujamos los objetos encontrados
         if x_cuadrado is not None and y_cuadrado is not None:
-            dibujar_forma('cuadrado', x_cuadrado, y_cuadrado, w_cuadrado, h_cuadrado, frame)
+            dibujar_forma('square', x_cuadrado, y_cuadrado, w_cuadrado, h_cuadrado, frame)
         if x_triangulo is not None and y_triangulo is not None:
             dibujar_forma('triangulo', x_triangulo, y_triangulo, w_triangulo, h_triangulo, frame)
         if x_circulo is not None and y_circulo is not None:
