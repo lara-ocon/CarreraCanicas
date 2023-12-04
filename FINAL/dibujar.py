@@ -270,7 +270,7 @@ def complete_figure(figure, picam, output_video):
         # Escribimos en el video
         output_video.write(frame_flipped)
 
-        timer += 0.01
+        timer += 0.000001
 
 
     return salir
