@@ -249,6 +249,7 @@ def complete_figure(figure, picam, output_video):
         print(time.time() - tiempo_inicial)
         print(texto)
         if tiempo_inicial and (time.time() - tiempo_inicial < 5): 
+            print('Entroooo')
             frame = picam.capture_array()
 
             # Dibujar la trayectoria en el frame
