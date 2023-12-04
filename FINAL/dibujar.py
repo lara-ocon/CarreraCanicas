@@ -147,7 +147,7 @@ if __name__ == "__main__":
             texto_video = "El cuadrado esta mal"
 
         frame_flipped = frame_with_square[:, ::-1, :]
-        cv2.putText(frame_flipped, texto_video, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
+        # cv2.putText(frame_flipped, texto_video, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
 
         cv2.imshow("picam", frame_flipped)
 
