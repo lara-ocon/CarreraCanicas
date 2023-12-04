@@ -245,6 +245,9 @@ def complete_figure(figure, picam, output_video):
             break
     
     while salir:
+        print('Entro a salir')
+        print(time.time() - tiempo_inicial)
+        print(texto)
         if tiempo_inicial and (time.time() - tiempo_inicial < 5): 
             frame = picam.capture_array()
 
