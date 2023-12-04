@@ -108,7 +108,7 @@ def compare_trajectory_square(trajectory):
     # comparamos las imagenes
     difference = cv2.subtract(img1, img2)
 
-    print(difference)
+    print(np.sum(difference))
     
     # si la diferencia no es muy alta, es que el cuadrado esta bien
     if np.sum(difference) < 1000000:
