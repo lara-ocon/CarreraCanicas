@@ -156,7 +156,7 @@ def compare_trajectory(trajectory, shape):
         cv2.rectangle(img1, (centro[0] - 100, centro[1] - 100), (centro[0] + 100, centro[1] + 100), (255, 0, 0), 20)
         threshold = 0.08
     elif shape == "triangle":
-        img1 = overlay_large_triangle(img1)
+        img1 = overlay_triangle(img1)
         threshold = 0.6
     elif shape == "disney":
         overlay_disney_logo(img1)
