@@ -89,7 +89,7 @@ def overlay_square(frame):
 
 
 # Funcion para dibujar un triangulo centrado y más grande sobre el video
-def overlay_large_triangle(frame):
+def overlay_triangle(frame):
     # Definir los vértices del triángulo más grande
     pts = np.array([[100, 300], [200, 100], [300, 300]], np.int32)
     pts = pts.reshape((-1, 1, 2))

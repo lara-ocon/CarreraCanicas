@@ -1,7 +1,7 @@
 import detector 
 import cv2
 import calibration
-import tracker_disney_check_2 as disney_tracker
+import dibujar 
 import formas
 from picamera2 import Picamera2
 
@@ -39,11 +39,10 @@ if __name__ == "__main__":
     forma = formas.tracker_objetos(picam)
 
     # 3) Procedemos a dibujar la forma pedida
-    if forma == "circulo":
-        disney_tracker.initialize_tracker(picam)
+    dibujar.complete_figure(forma)
 
     cv2.destroyAllWindows()
 
     picam.stop()
-    
+
 
