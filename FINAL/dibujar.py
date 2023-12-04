@@ -188,7 +188,6 @@ def compare_trajectory(trajectory, shape):
     
 
 def complete_figure(figure, picam, output_video):
-    tiempo_inicial = None
     salir = False
     prev_x, prev_y = None, None
     trajectory = []
@@ -240,7 +239,7 @@ def complete_figure(figure, picam, output_video):
             cv2.putText(frame_flipped_no_text, texto, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
             cv2.imshow("picam", frame_flipped_no_text)
             cv2.waitKey(5000)
-            salir = True
+            salir = False
             break
         elif key == ord('q'):
             salir = True
