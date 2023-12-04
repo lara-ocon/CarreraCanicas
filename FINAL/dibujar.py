@@ -100,7 +100,7 @@ def compare_trajectory_square(trajectory):
     cv2.rectangle(img1, (centro[0] - 100, centro[1] - 100), (centro[0] + 100, centro[1] + 100), (255, 0, 0), 20)
 
     # hacemos una imagen en blanco
-    img2 = np.zeros((512, 512, 3), np.uint8)
+    img2 = np.zeros((640, 480, 3), np.uint8)
     # dibujamos la trayectoria
     for i in range(1, len(trajectory)):
         cv2.line(img2, trajectory[i - 1], trajectory[i], (255, 255, 0), 15)
