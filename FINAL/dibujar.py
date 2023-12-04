@@ -88,13 +88,23 @@ def overlay_square(frame):
     return frame
 
 
-# Funcion para dibujar 1 triangulo sobre el video
-def overlay_triangle(frame):
-    # Dibujar un triangulo
-    pts = np.array([[100, 300], [200, 200], [300, 300]], np.int32)
+# Funcion para dibujar un triangulo centrado y más grande sobre el video
+def overlay_large_triangle(frame):
+    # Definir los vértices del triángulo más grande
+    pts = np.array([[100, 300], [200, 100], [300, 300]], np.int32)
     pts = pts.reshape((-1, 1, 2))
-    cv2.polylines(frame, [pts], True, (0, 255, 255), 5)
+
+    # Escalar los vértices del triángulo para hacerlo más grande y centrado
+    scale_factor = 2  # Factor de escala para agrandar el triángulo
+    center_offset = [frame.shape[1] // 2 - 150, frame.shape[0] // 2 - 100]  # Desplazamiento para centrar el triángulo
+
+    scaled_pts = pts * scale_factor
+    translated_pts = scaled_pts + center_offset
+
+    # Dibujar el triángulo más grande
+    cv2.polylines(frame, [translated_pts], True, (0, 255, 255), 20)
     return frame
+
 
 
 # Funcion para dibujar el logo de disney
@@ -146,9 +156,7 @@ def compare_trajectory(trajectory, shape):
         cv2.rectangle(img1, (centro[0] - 100, centro[1] - 100), (centro[0] + 100, centro[1] + 100), (255, 0, 0), 20)
         threshold = 0.08
     elif shape == "triangle":
-        pts = np.array([[100, 300], [200, 200], [300, 300]], np.int32)
-        pts = pts.reshape((-1, 1, 2))
-        cv2.polylines(img1, [pts], True, (0, 255, 255), 5)
+        img1 = overlay_large_triangle(img1)
         threshold = 0.6
     elif shape == "disney":
         overlay_disney_logo(img1)
