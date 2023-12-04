@@ -235,7 +235,6 @@ def complete_figure(figure, picam, output_video):
             else:
                 texto = "La figura esta mal"
 
-            # esperamos 5 segundos y salimos
             salir = True
             timer = 0
             break
@@ -246,7 +245,7 @@ def complete_figure(figure, picam, output_video):
             break
     
     tiempo_inicial = time.time()
-    if salir and (time.time() - tiempo_inicial) > 5 and timer == 0:
+    if salir and (time.time() - tiempo_inicial) < 5 and timer == 0:
         # Mostramos mensaje sobre el video
         frame = picam.capture_array()
 
