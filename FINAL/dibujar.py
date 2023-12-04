@@ -74,7 +74,7 @@ def draw_trajectory(frame, trajectory):
 def overlay_square(frame):
     # Dibujar un cuadrado en el centro y muy grande
     centro = (frame.shape[1] // 2, frame.shape[0] // 2)
-    cv2.Rectange(frame, (centro[0] - 100, centro[1] - 100), (centro[0] + 100, centro[1] + 100), (255, 0, 0), 20)
+    cv2.Rectangle(frame, (centro[0] - 100, centro[1] - 100), (centro[0] + 100, centro[1] + 100), (255, 0, 0), 20)
     return frame
 
 
@@ -97,7 +97,7 @@ def compare_trajectory_square(trajectory):
     img1 = np.zeros((640, 480, 3), np.uint8)
     # dibujamos el cuadrado perfecto
     centro = (img1.shape[1] // 2, img1.shape[0] // 2)
-    cv2.Rectange(img1, (centro[0] - 100, centro[1] - 100), (centro[0] + 100, centro[1] + 100), (255, 0, 0), 20)
+    cv2.Rectangle(img1, (centro[0] - 100, centro[1] - 100), (centro[0] + 100, centro[1] + 100), (255, 0, 0), 20)
 
     # hacemos una imagen en blanco
     img2 = np.zeros((512, 512, 3), np.uint8)
