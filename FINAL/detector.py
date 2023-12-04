@@ -150,7 +150,7 @@ if __name__ == "__main__":
         desbloqueado = detectar_patron(patron, not_patron, picam, output_video)
  
     print('Desbloqueado')
-    cv2.waitKey(5000)
+    cv2.waitKey(7000)
 
     output_video.release()
 
