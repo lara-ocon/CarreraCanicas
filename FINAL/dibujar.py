@@ -103,7 +103,7 @@ def compare_trajectory_square(trajectory):
     img2 = np.zeros((640, 480, 3), np.uint8)
     # dibujamos la trayectoria
     for i in range(1, len(trajectory)):
-        cv2.line(img2, trajectory[i - 1], trajectory[i], (255, 255, 0), 15)
+        cv2.line(img2, trajectory[i - 1], trajectory[i], (255, 0, 0), 20)
 
     # comparamos las imagenes
     difference = cv2.subtract(img1, img2)
