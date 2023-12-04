@@ -64,6 +64,16 @@ def tracker(frame, prev_x, prev_y, trajectory, is_tracking):
 
 # Dibujar la trayectoria del objeto en el frame
 def draw_trajectory(frame, trajectory):
+
+    # primero interpolamos la trayectoria para que sea mas
+
+    smooth_trajectory = []
+    for i in range(1, len(trajectory)):
+        x1, y1 = trajectory[i-1]
+        x2, y2 = trajectory[i]
+        smooth_trajectory.append((x1, y1))
+        smooth_trajectory.append(((x1 + x2) // 2, (y1 + y2) // 2))
+
     # Dibujar la trayectoria almacenada
     for i in range(1, len(trajectory)):
         cv2.line(frame, trajectory[i - 1], trajectory[i], (255, 255, 0), 15)
@@ -130,20 +140,23 @@ def compare_trajectory(trajectory, shape):
     # Crear un cuadrado perfecto en una imagen en blanco
     img1 = np.zeros((640, 480, 3), np.uint8)
     centro = (img1.shape[1] // 2, img1.shape[0] // 2)
+    threshold = 0
 
     if shape == "square":
         cv2.rectangle(img1, (centro[0] - 100, centro[1] - 100), (centro[0] + 100, centro[1] + 100), (255, 0, 0), 20)
+        threshold = 0.08
     elif shape == "triangle":
         pts = np.array([[100, 300], [200, 200], [300, 300]], np.int32)
         pts = pts.reshape((-1, 1, 2))
         cv2.polylines(img1, [pts], True, (0, 255, 255), 5)
+        threshold = 0.6
     elif shape == "disney":
         overlay_disney_logo(img1)
+        threshold = 5
 
     # Crear una imagen en blanco y dibujar la trayectoria
     img2 = np.zeros((640, 480, 3), np.uint8)
-    for i in range(1, len(trajectory)):
-        cv2.line(img2, trajectory[i - 1], trajectory[i], (255, 0, 0), 20)
+    img2 = draw_trajectory(img2, trajectory)
 
     # Convertir imágenes a escala de grises
     gray1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
@@ -165,7 +178,7 @@ def compare_trajectory(trajectory, shape):
     # Si la distancia más pequeña es menor a un umbral, consideramos que el cuadrado está bien
     min_distance = min(distances)
     print(min_distance)
-    if min_distance < 0.08:  # Ajusta el umbral según sea necesario
+    if min_distance < threshold:  # Ajusta el umbral según sea necesario
         return True
     else:
         return False
@@ -209,7 +222,7 @@ def complete_figure(figure):
             is_tracking = True
             texto = 'Pulsa "e" para terminar de dibujar'
         elif key == ord('e'):
-            # comprobamos si la trayectoria
+            # comprobamos si la trayectoria esta bien
             if compare_trajectory(trajectory, figure):
                 texto = "La figura esta bien"
             else:
