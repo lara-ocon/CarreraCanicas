@@ -230,11 +230,11 @@ def tracker_objetos(picam, output_video):
         if key == ord('s'):
             if sum([x_cuadrado is not None, x_triangulo is not None, x_circulo is not None]) == 1:
                 if x_cuadrado is not None:
-                    return 'square'
+                    return 'square', False
                 elif x_triangulo is not None:
-                    return 'triangle'
+                    return 'triangle', False
                 elif x_circulo is not None:
-                    return 'disney'
+                    return 'disney', False
         elif key == ord('q'):
             break
         
