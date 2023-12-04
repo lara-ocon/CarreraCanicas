@@ -187,6 +187,7 @@ def compare_trajectory(trajectory, shape):
     
 
 def complete_figure(figure, picam, output_video):
+    timer = 0
     salir = False
     prev_x, prev_y = None, None
     trajectory = []
@@ -234,11 +235,44 @@ def complete_figure(figure, picam, output_video):
                 texto = "La figura esta mal"
 
             # esperamos 5 segundos y salimos
-            cv2.waitKey(5000)
+            salir = True
+            timer = 0
             break
         elif key == ord('q'):
             salir = True
+            texto = "Saliendo..."
+            timer = 5
             break
+    
+    if salir and timer < 5:
+        # Mostramos mensaje sobre el video
+        frame = picam.capture_array()
+
+        # ponemos la figura
+        if figure == "square":
+            frame_with_figure = overlay_square(frame)
+        elif figure == "triangle":
+            frame_with_figure = overlay_triangle(frame)
+        elif figure == "disney":
+            frame_with_figure = overlay_disney_logo(frame)
+        
+        # ponemos la trayectoria
+        frame_with_trajectory = draw_trajectory(frame_with_figure.copy(), trajectory)
+
+        # flipeamos
+        frame_flipped = cv2.flip(frame_with_trajectory, 1)
+
+        # Mostramos mensaje
+        cv2.putText(frame_flipped, texto, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+
+        cv2.imshow("picam", frame_flipped)
+
+        # Escribimos en el video
+        output_video.write(frame_flipped)
+
+        timer += 0.01
+
+
     return salir
 
 if __name__ == "__main__":
