@@ -36,10 +36,12 @@ if __name__ == "__main__":
     cv2.waitKey(5000)
 
     # 2) Detectar la forma que se va a querer seguir
-    forma = formas.tracker_objetos(picam)
+    while not salir:
+        forma, salir = formas.tracker_objetos(picam)
 
-    # 3) Procedemos a dibujar la forma pedida
-    dibujar.complete_figure(forma, picam)
+        # 3) Procedemos a dibujar la forma pedida
+        if forma != None:
+            salir = dibujar.complete_figure(forma, picam)
 
     cv2.destroyAllWindows()
 

@@ -84,7 +84,7 @@ def draw_trajectory(frame, trajectory):
 def overlay_square(frame):
     # Dibujar un cuadrado en el centro y muy grande
     centro = (frame.shape[1] // 2, frame.shape[0] // 2)
-    cv2.rectangle(frame, (centro[0] - 100, centro[1] - 100), (centro[0] + 100, centro[1] + 100), (255, 0, 0), 20)
+    cv2.rectangle(frame, (centro[0] - 100, centro[1] - 100), (centro[0] + 100, centro[1] + 100), (255, 0, 0), 20) # frame, coordenadas de la esquina superior izquierda, coordenadas de la esquina inferior derecha, color, grosor
     return frame
 
 
@@ -92,11 +92,11 @@ def overlay_square(frame):
 def overlay_triangle(frame):
 
     # Definir los vértices del triángulo más grande
-    pts = np.array([[150, 350], [320, 100], [490, 350]], np.int32)
-    pts = pts.reshape((-1, 1, 2))
+    pts = np.array([[150, 350], [320, 100], [490, 350]], np.int32) # coordenadas de los vertices del triangulo
+    pts = pts.reshape((-1, 1, 2)) # reshape para que sea un array de 3x1x2
 
     # Dibujar el triángulo más grande centrado en la imagen
-    cv2.polylines(frame, [pts], True, (0, 255, 255), 20)
+    cv2.polylines(frame, [pts], True, (0, 255, 255), 20) # frame, array de puntos, cerrado, color, grosor
     return frame
 
 
@@ -188,7 +188,7 @@ def compare_trajectory(trajectory, shape):
     
 
 def complete_figure(figure, picam):
-
+    salir = False
     prev_x, prev_y = None, None
     trajectory = []
     is_tracking = False
@@ -231,12 +231,13 @@ def complete_figure(figure, picam):
             else:
                 texto = "La figura esta mal"
 
-            is_tracking = False
-            trajectory = []
-            prev_x = None
-            prev_y = None
-        elif key == ord('q'):
+            # esperamos 5 segundos y salimos
+            cv2.waitKey(5000)
             break
+        elif key == ord('q'):
+            salir = True
+            break
+    return salir
 
 if __name__ == "__main__":
 
@@ -247,6 +248,6 @@ if __name__ == "__main__":
     picam.configure("preview")
     picam.start()
     
-    complete_figure("triangle", picam)
+    salir = complete_figure("triangle", picam)
 
     cv2.destroyAllWindows()

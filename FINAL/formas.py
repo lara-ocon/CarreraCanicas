@@ -234,6 +234,8 @@ def tracker_objetos(picam):
                     return 'disney'
         elif key == ord('q'):
             break
+        
+    return None, True # forma None, salir True
 
     
 if __name__ == "__main__":
@@ -246,7 +248,7 @@ if __name__ == "__main__":
     picam.start()
 
     # Trackeamos los objetos
-    forma = tracker_objetos(picam)
+    forma, salir = tracker_objetos(picam)
 
     print("La forma es: ", forma)
 
