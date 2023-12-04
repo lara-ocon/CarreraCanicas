@@ -152,7 +152,7 @@ def compare_trajectory(trajectory, shape):
         threshold = 0.08
     elif shape == "triangle":
         img1 = overlay_triangle(img1)
-        threshold = 0.6
+        threshold = 0.8
     elif shape == "disney":
         overlay_disney_logo(img1)
         threshold = 5
