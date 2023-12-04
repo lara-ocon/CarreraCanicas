@@ -252,6 +252,6 @@ if __name__ == "__main__":
     picam.configure("preview")
     picam.start()
     
-    complete_figure("disney")
+    complete_figure("triangle")
 
     cv2.destroyAllWindows()
