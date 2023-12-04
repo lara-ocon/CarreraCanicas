@@ -112,7 +112,6 @@ def tracker_triangulo_naranja(frame, prev_x, prev_y):
         return frame, prev_x, prev_y, x, y, w, h
 
 
-
 def tracker_circulo_azul(frame, prev_x, prev_y):
 
     # Convertir el frame de BGR a HSV

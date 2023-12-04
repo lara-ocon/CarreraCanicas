@@ -2,6 +2,7 @@ import detector
 import cv2
 import calibration
 import tracker_disney_check_2 as disney_tracker
+import formas
 from picamera2 import Picamera2
 
 
@@ -34,8 +35,13 @@ if __name__ == "__main__":
     # esperamos 5 segundos y pasamos a la siguiente fase
     cv2.waitKey(5000)
 
-    # 2) Dibujar el patron de la pantalla
-    disney_tracker.initialize_tracker(picam)
+    # 2) Detectar la forma que se va a querer seguir
+    forma = formas.tracker_objetos(picam)
+
+    # 3) Procedemos a dibujar la forma pedida
+    if forma == "circulo":
+        disney_tracker.initialize_tracker(picam)
+
     cv2.destroyAllWindows()
 
     picam.stop()
