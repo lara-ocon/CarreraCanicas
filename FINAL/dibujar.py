@@ -173,8 +173,7 @@ def compare_trajectory(trajectory, shape):
     contour1 = max(contours1, key=cv2.contourArea)
     
     # Calcular la distancia entre los contornos del cuadrado y la trayectoria
-    distances = [cv2.matchShapes(contour1, contour2, cv2.CONTOURS_MATCH_I2, 0.0) for contour2 in contours2]
-
+    distances = [cv2.matchShapes(contour1, contour2, cv2.CONTOURS_MATCH_I2, 0.0) for contour2 in contours2] 
     if len(distances) == 0:
         return False
     
