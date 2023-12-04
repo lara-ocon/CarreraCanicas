@@ -213,6 +213,7 @@ def complete_figure(figure, picam, output_video):
 
         # flipeamos
         frame_flipped = cv2.flip(frame_with_trajectory, 1)
+        frame_flipped_no_text = frame_flipped.copy()
 
         # Mostramos mensaje
         cv2.putText(frame_flipped, texto, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
@@ -235,38 +236,15 @@ def complete_figure(figure, picam, output_video):
             else:
                 texto = "La figura esta mal"
 
+            # mostramos el texto
+            cv2.putText(frame_flipped_no_text, texto, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+            cv2.imshow("picam", frame_flipped_no_text)
+            cv2.waitKey(5000)
             salir = True
-            tiempo_inicial = time.time()
             break
         elif key == ord('q'):
             salir = True
-            texto = "Saliendo..."
 
-            break
-    
-    while salir:
-        print('Entro a salir')
-        print(time.time() - tiempo_inicial)
-        print(texto)
-        if tiempo_inicial and (time.time() - tiempo_inicial < 5): 
-            print('Entroooo')
-            time.sleep(0.1)
-            frame = picam.capture_array()
-
-            # Dibujar la trayectoria en el frame
-            frame_with_trajectory = draw_trajectory(frame.copy(), trajectory)
-
-            # flipeamos
-            frame_flipped = cv2.flip(frame_with_trajectory, 1)
-
-            # Mostramos mensaje
-            cv2.putText(frame_flipped, texto, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-
-            cv2.imshow("picam", frame_flipped)
-
-            # Escribimos en el video
-            output_video.write(frame_flipped)
-        else:
             break
 
 
