@@ -218,11 +218,12 @@ def tracker_objetos(picam, output_video):
         if x_circulo is not None and y_circulo is not None:
             dibujar_forma('circulo', x_circulo, y_circulo, w_circulo, h_circulo, frame)
         
+        flipped_frame = frame[:, ::-1, :]  # Voltear el frame horizontalmente
         # Mostramos el frame
-        cv2.imshow("picam", frame[:, ::-1, :])
+        cv2.imshow("picam", flipped_frame)
 
         # Guardamos el frame en el video
-        output_video.write(frame)
+        output_video.write(flipped_frame)
 
         # Si se pulsa una tecla y en ese momento solo hay 1 objeto en pantalla
         # nos quedamos con ese objeto y salimos del bucle

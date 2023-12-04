@@ -238,7 +238,7 @@ def complete_figure(figure, picam, output_video):
             # mostramos el texto
             cv2.putText(frame_flipped_no_text, texto, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
             cv2.imshow("picam", frame_flipped_no_text)
-            cv2.waitKey(5000)
+            cv2.waitKey(10000)
             salir = False
             break
         elif key == ord('q'):
