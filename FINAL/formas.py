@@ -162,7 +162,7 @@ def tracker_circulo_azul(frame, prev_x, prev_y):
 def dibujar_forma(tipo, x, y, w, h, frame):
 
     # pintamos la forma
-    if tipo == 'cuadrado':
+    if tipo == 'square':
         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
         # pintamos un punto en el centro
         cv2.circle(frame, (x + w//2, y + h//2), 5, (0, 0, 255), -1)

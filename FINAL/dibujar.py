@@ -90,20 +90,15 @@ def overlay_square(frame):
 
 # Funcion para dibujar un triangulo centrado y más grande sobre el video
 def overlay_triangle(frame):
+
     # Definir los vértices del triángulo más grande
-    pts = np.array([[100, 300], [200, 100], [300, 300]], np.int32)
+    pts = np.array([[150, 350], [320, 100], [490, 350]], np.int32)
     pts = pts.reshape((-1, 1, 2))
 
-    # Escalar los vértices del triángulo para hacerlo más grande y centrado
-    scale_factor = 2  # Factor de escala para agrandar el triángulo
-    center_offset = [frame.shape[1] // 2 - 150, frame.shape[0] // 2 - 100]  # Desplazamiento para centrar el triángulo
-
-    scaled_pts = pts * scale_factor
-    translated_pts = scaled_pts + center_offset
-
-    # Dibujar el triángulo más grande
-    cv2.polylines(frame, [translated_pts], True, (0, 255, 255), 20)
+    # Dibujar el triángulo más grande centrado en la imagen
+    cv2.polylines(frame, [pts], True, (0, 255, 255), 20)
     return frame
+
 
 
 
