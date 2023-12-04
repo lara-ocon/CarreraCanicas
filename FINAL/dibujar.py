@@ -113,6 +113,9 @@ def compare_trajectory_square(trajectory):
     # Calcular la distancia entre los contornos del cuadrado y la trayectoria
     distances = [cv2.matchShapes(contour1, contour2, cv2.CONTOURS_MATCH_I2, 0.0) for contour2 in contours2]
 
+    if len(distances) == 0:
+        return False
+    
     # Si la distancia más pequeña es menor a un umbral, consideramos que el cuadrado está bien
     min_distance = min(distances)
     print(min_distance, max(distances))
