@@ -1,4 +1,4 @@
-# PracticaFinalVision
+# Practica Final Vision
 ### Hecho por Lara Ocón y Lucía Prado
 
 
